@@ -1,0 +1,79 @@
+.inputBox {
+    position: relative;
+}
+  
+.inputBox input {
+    width: 100%;
+    padding: 10px;
+    outline: none;
+    border: none;
+    color: #000;
+    font-size: 1em;
+    background: transparent;
+    border-left: 2px solid #000;
+    border-bottom: 2px solid #000;
+    transition: all 0.3s ease;
+    border-bottom-left-radius: 8px;
+}
+  
+.inputBox span {
+    margin-top: 5px;
+    position: absolute;
+    left: 0;
+    transform: translateY(-4px);
+    margin-left: 10px;
+    padding: 10px;
+    pointer-events: none;
+    font-size: 12px;
+    color: #000;
+    text-transform: uppercase;
+    transition: all 0.5s ease;
+    letter-spacing: 3px;
+    border-radius: 8px;
+}
+  
+.inputBox input:focus ~ span {
+    font-size: 0.7em;
+    padding: 5px 10px;
+    background: #000;
+    color: #fff;
+    letter-spacing: 0.2em;
+}
+
+.inputBox input:focus {
+    border: 2px solid #000;
+    border-radius: 8px;
+}
+
+    /* Error styling */
+.inputBox input.ng-invalid.ng-touched:focus {
+    border: 2px solid #f87171;
+    border-radius: 8px;
+}
+.inputBox input.ng-invalid.ng-touched {
+    border-left: 2px solid #f87171;
+    border-bottom: 2px solid #f87171;
+ }
+    /* valid styling */
+.inputBox input.ng-valid:focus {
+    border: 2px solid #4caf50;
+    border-radius: 8px;
+}
+
+.inputBox input.ng-valid:focus {
+    border-left: 2px solid #4caf50;
+    border-bottom: 2px solid #4caf50;
+}
+    
+.inputBox input.ng-valid {
+    border-left: 2px solid #4caf50;
+    border-bottom: 2px solid #4caf50;
+}
+
+.emailInput input:focus ~ span{
+    transform: translate(80px, -15px);
+}
+
+.passwordInput input:focus ~ span{
+    transform: translate(150px, -15px);
+}

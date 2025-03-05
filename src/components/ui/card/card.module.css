@@ -1,0 +1,37 @@
+.card {
+  background-color: var(--card);
+  color: var(--card-foreground);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.cardHeader {
+  display: flex;
+  flex-direction: column;
+  padding: 24px 24px 0;
+}
+
+.cardTitle {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.cardDescription {
+  color: var(--muted-foreground);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.cardContent {
+  padding: 24px;
+}
+
+.cardFooter {
+  padding: 0 24px 24px;
+  display: flex;
+  align-items: center;
+}
+
