@@ -6,7 +6,7 @@ export interface Match {
         participant2: Participant,
         comments:string,
         matchResult: MatchResult,
-        MatchCarts: MatchCarts,
+        matchCarts: MatchCarts,
         matchTime: string,
         createdAt: string,
         updatedAt: string
