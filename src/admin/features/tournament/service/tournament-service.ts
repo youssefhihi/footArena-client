@@ -31,6 +31,9 @@ const TournamentService = {
   getAvailableTournaments: async (): Promise<ApiResponse<Tournament[]>> => {
     return fetchApi<Tournament[]>('tournament/available', { method: 'GET' });
   },
+  getTournamentById: async (id: string): Promise<ApiResponse<Tournament>> => {
+    return fetchApi<Tournament>(`tournament/${id}`, { method: 'GET' });
+  },
 };
 
 export default TournamentService;

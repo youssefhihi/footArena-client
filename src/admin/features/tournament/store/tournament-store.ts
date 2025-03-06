@@ -8,18 +8,35 @@ interface TournamentState {
   isLoading: boolean;
   error: Record<string, string> | null;
   fetchTournaments: () => Promise<void>;
-  createTournament: (data: TournamentRequest) => Promise<void>;
-  updateTournament: (id: string, data: TournamentRequest) => Promise<void>;
+  createTournament: (data: TournamentRequest) => Promise<boolean>;
+  updateTournament: (id: string, data: TournamentRequest) => Promise<boolean>;
   softDeleteTournament: (id: string) => Promise<void>;
   restoreTournament: (id: string) => Promise<void>;
   forceDeleteTournament: (id: string) => Promise<void>;
+  getTournamentById: (id: string) => Promise<Tournament | undefined | null>;
 }
 
-export const useTournamentStore = create<TournamentState>((set) => ({
+export const useTournamentStore = create<TournamentState>((set,get) => ({
   tournaments: [],
   isLoading: false,
   error: null,
-
+  getTournamentById: async (id) => {
+    set({ isLoading: true, error: null });
+      const existingTournament = get().tournaments.find(t => t.tournamentId === id);
+      if (existingTournament) {
+        set({ isLoading: false });
+        console.log("inside", existingTournament);
+        return existingTournament;
+      }
+      const response = await TournamentService.getTournamentById(id);
+      if (!response.success) {
+        toast.error(response.message || 'Failed to get tournament');
+        set({ error: response.errors, isLoading: false });
+        return null;
+      }
+      set({ isLoading: false });
+      return response.data;
+  },
   fetchTournaments: async () => {
     set({ isLoading: true, error: null });
       const response = await TournamentService.getUserTournaments();
@@ -41,7 +58,7 @@ export const useTournamentStore = create<TournamentState>((set) => ({
         } else {
           toast.error(response.errors?.message || 'Failed to create tournament');
         }
-        return;
+        return false;
       }
       
       set((state) => ({
@@ -49,6 +66,7 @@ export const useTournamentStore = create<TournamentState>((set) => ({
         isLoading: false,
       }));
       toast.success(response.message);
+      return true;
     
   },
 
@@ -62,7 +80,7 @@ export const useTournamentStore = create<TournamentState>((set) => ({
         } else {
           toast.error(response.errors?.message || 'Failed to update tournament');
         }
-        return;
+        return false;
       }
       set((state) => ({
         tournaments: state.tournaments.map((t) =>
@@ -71,7 +89,7 @@ export const useTournamentStore = create<TournamentState>((set) => ({
         isLoading: false,
       }));
       toast.success(response.message);
-   
+      return response.success;
   },
 
   softDeleteTournament: async (id) => {

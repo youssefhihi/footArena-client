@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { motion } from "framer-motion"
 import { FiPlus, FiFilter, FiDownload, FiChevronLeft, FiChevronRight, FiTrash2 } from "react-icons/fi"
 import { GiTrophy } from "react-icons/gi"
@@ -8,12 +8,14 @@ import { SearchBar } from "./ui/SearchBar"
 import { Button } from "./ui/Button"
 import { TournamentCard } from "./ui/TournamentCard"
 import { useTournamentStore } from "../store/tournament-store"
+import { useNavigate } from "react-router-dom"
 
 
 
 // Tournament Management Component
 export default function TournamentList() {
-    const { tournaments, fetchTournaments, softDeleteTournament } = useTournamentStore();
+  const navigate = useNavigate();
+    const { tournaments, softDeleteTournament } = useTournamentStore();
     const [searchTerm, setSearchTerm] = useState("")
     const [currentPage, setCurrentPage] = useState(1)
     const [selectedTournament, setSelectedTournament] = useState<Tournament>()
@@ -24,9 +26,8 @@ export default function TournamentList() {
         isTeams: "all",
     })
 
-    useEffect(() => {
-        fetchTournaments();
-    }, [fetchTournaments]);
+
+
       
   const tournamentsPerPage = 5
 
@@ -52,11 +53,11 @@ export default function TournamentList() {
 
   // Handle tournament actions
   const handleViewTournament = (tournament: Tournament) => {
-    console.log("View tournament:", tournament)
+    navigate(`/dashboard/tournaments/${tournament.tournamentId}`)
   }
 
   const handleEditTournament = (tournament: Tournament) => {
-    console.log("Edit tournament:", tournament)
+    navigate(`/dashboard/tournaments/edit/${tournament.tournamentId}`)
   }
 
   const handleDeleteTournament = (tournament: Tournament) => {

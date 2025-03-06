@@ -65,6 +65,7 @@ export const fetchApi = async <T>(
       console.log('fetchApi: no response data');
       return {
         success: false,
+        message: "An error occurred",
         errors: { message: "An error occurred" },
       };
     }
@@ -89,7 +90,6 @@ export const fetchApi = async <T>(
     if (axiosError.response && axiosError.response.data) {
       const data = axiosError.response.data as ApiResponse<unknown>;
 
-      console.log(typeof data.errors, data.errors);
       if (data.errors && typeof data.errors === 'object') {
         console.log('object');
         errorMessage = Object.keys(data.errors).map((field) => ({
@@ -111,6 +111,7 @@ export const fetchApi = async <T>(
     return {
       success: false,
       errors: errorMessage,
+      message: errorMessage,
     } as ApiResponse<T>;
   }
 };

@@ -7,8 +7,9 @@ import { ForgetPassword } from "../features/auth/components/forget-password";
 import Admin from "../layouts/Admin";
 import DashboardHome from "../admin/features/dashboard/components/dashboard";
 import TournamentManagement from "../admin/features/tournament/components/tournament";
-import { CreateTournament } from "../admin/features/tournament/components/create-tournament";
+import { TournamentForm } from "../admin/features/tournament/components/tournament-form";
 import TournamentList from "../admin/features/tournament/components/Tournament-list";
+import TournamentInfo from "../admin/features/tournament/components/tournament-info";
 
 const AppRouter = () => {
     return (
@@ -25,7 +26,9 @@ const AppRouter = () => {
             <Route path="" element={<DashboardHome />} />
             <Route path="tournaments" element={<TournamentManagement />} >
               <Route path="" element={<TournamentList />} />
-              <Route path="create" element={<CreateTournament />} />
+              <Route path="create" element={<TournamentForm />} />
+              <Route path="edit/:tournamentId" element={<TournamentForm />} />
+              <Route path=":tournamentId" element={<TournamentInfo />}/>
             </Route>
           </Route>
         </Routes>
