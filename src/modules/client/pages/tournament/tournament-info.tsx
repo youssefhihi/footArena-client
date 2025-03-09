@@ -3,16 +3,17 @@ import { motion, AnimatePresence } from "framer-motion"
 import { format } from "date-fns"
 import { FiCalendar, FiUsers, FiAward, FiInfo, FiList, FiActivity } from "react-icons/fi"
 import { useParams } from "react-router-dom"
-import { useTournamentStore } from "../../../core/store/tournament-store"
-import { Tournament } from "../../../types/tournament"
-import { useMatchStore } from "../../../core/store/match-store"
-import { useRoundStore } from "../../../core/store/round-store"
+import { useTournamentStore } from "../../../../core/store/tournament-store"
+import { Tournament } from "../../../../types/tournament"
+import { useMatchStore } from "../../../../core/store/match-store"
+import { useRoundStore } from "../../../../core/store/round-store"
 import { Frown } from "lucide-react";
-import { formatDate } from "../../../commun/utils/constant/date-formater"
-import { RoundRobinTable } from "../../../commun/components/round/RoundRobinTable"
-import { MatchCard } from "../../../commun/components/match/matchCard"
-import { TournamentDetails } from "../../../commun/components/tournament/tournament-details"
-import { OrganizationCard } from "../../../commun/components/organization/organization-card"
+import { formatDate } from "../../../../commun/utils/constant/date-formater"
+import { OrganizationCard } from "../../../../commun/components/organization/organization-card"
+import { RoundRobinTable } from "../../../../commun/components/round/RoundRobinTable"
+import { TournamentDetails } from "../../../../commun/components/tournament/tournament-details"
+import { MatchCard } from "../../../../commun/components/match/matchCard"
+import { Organization } from "../../../../types/organozation"
 
 
 
@@ -24,7 +25,7 @@ const tabs = [
   { id:"participants", label: "Participants", icon: FiUsers },
 ]
 
-export default function TournamentInfo() {
+export default function TournamentuInfo() {
   const [activeTab, setActiveTab] = useState("overview")
   const [tournament, setTournament] = useState<Tournament | undefined | null>();
   const { tournamentId } = useParams<{ tournamentId: string }>();
@@ -45,11 +46,13 @@ export default function TournamentInfo() {
       if(activeTab === "table") fetchTournamentRounds(tournamentId!);
     }, [tournamentId, getTournamentById, fetchTournamentMatches, activeTab]);
 
-  
+  const handleViewOrganization = (organization: Organization) => {
+    console.log("Viewing organization:", organization);
+  }
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen ">
       {/* Tournament Header */}
-      <div className="relative bg-gradient-to-r from-blue-800 to-indigo-400 px-4 py-8 sm:px-6 lg:px-8 rounded-lg">
+      <div className="relative bg-gradient-to-r from-blue-700 to-green-400 px-4 py-8 sm:px-6 lg:px-8 rounded-lg">
         <div className="relative mx-auto max-w-7xl">
           <div className="md:flex md:items-center md:justify-between">
             {tournament ? (
@@ -102,8 +105,8 @@ export default function TournamentInfo() {
                     flex items-center border-b-2 px-1 py-4 text-sm font-medium
                     ${
                       activeTab === tab.id
-                        ? "border-blue-500 text-blue-500"
-                        : "border-transparent text-gray-400 hover:border-gray-300 hover:text-gray-300"
+                        ? "border-green-500 text-green-500"
+                        : "border-transparent text-blue-400 hover:border-blue-300 hover:text-blue-300"
                     }
                   `}
                 >
@@ -129,11 +132,11 @@ export default function TournamentInfo() {
            {tournament && activeTab === "overview" && (
               <div className="grid gap-6 ">
                 {/* Recent Activity */}
-                <div className="rounded-lg bg-gray-800 p-6">
+                <div className="rounded-lg bg-gray-600 p-6">
                   <h3 className="text-lg font-medium text-white">Recent Activity</h3>
                   <div className="mt-4 space-y-4">
                     {matches.slice(0, 3).map((match) => (
-                      <div key={match.matchId} className="rounded-md bg-gray-700 p-4">
+                      <div key={match.matchId} className="rounded-md bg-gray-500 p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-3">
                             <img
@@ -159,7 +162,7 @@ export default function TournamentInfo() {
                   </div>
                 </div>
                 {/* Tournament Info */}
-                <TournamentDetails className=" bg-gray-800" tournament={tournament} />
+                <TournamentDetails className="bg-gray-600" tournament={tournament} />
               </div>
             )}
 
@@ -170,7 +173,7 @@ export default function TournamentInfo() {
             {tournament &&  activeTab === "participants" && (
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                   {tournament.participants.map((participant) => (
-                      <OrganizationCard key={participant.participantId} organization={participant.organization} />
+                      <OrganizationCard onView={handleViewOrganization} key={participant.participantId} organization={participant.organization} />
                   ))}
               </div>
             )}

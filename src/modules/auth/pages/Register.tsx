@@ -8,7 +8,7 @@ import type { z } from "zod"
 import { registerSchema } from "../validation/validation"
 import { useAuthStore } from "../store/auth-store"
 import { FiUser, FiMail, FiLock, FiAlertCircle, FiUserPlus } from "react-icons/fi"
-import { Input } from "../components/ui/input"
+import { FormInput} from "../../../commun/components/input"
 
 type RegisterFormData = z.infer<typeof registerSchema>
 
@@ -102,7 +102,8 @@ export const Register = () => {
                   <div className="pointer-events-none absolute inset-y-13 left-0 flex items-center pl-3">
                     <FiUser className="h-5 w-5 text-blue-300 group-focus-within:text-blue-400" />
                   </div>
-                  <Input
+                  <FormInput
+                  className="text-white"
                     {...register("fullName.firstName")}
                     type="text"
                     label="First Name"
@@ -117,7 +118,8 @@ export const Register = () => {
                   <div className="pointer-events-none absolute inset-y-13 left-0 flex items-center pl-3">
                     <FiUser className="h-5 w-5 text-blue-300 group-focus-within:text-blue-400" />
                   </div>
-                  <Input
+                  <FormInput
+                  className="text-white"
                     {...register("fullName.lastName")}
                     label="Last Name"
                     error={errors.fullName?.lastName?.message }
@@ -133,7 +135,8 @@ export const Register = () => {
                 <div className="pointer-events-none absolute inset-y-13 left-0 flex items-center pl-3">
                   <FiUser className="h-5 w-5 text-blue-300 group-focus-within:text-blue-400" />
                 </div>
-                <Input
+                <FormInput
+                className="text-white"
                   {...register("username")}
                   label="Username"
                   type="text"
@@ -148,7 +151,8 @@ export const Register = () => {
                 <div className="pointer-events-none absolute inset-y-13 left-0 flex items-center pl-3">
                   <FiMail className="h-5 w-5 text-blue-300 group-focus-within:text-blue-400" />
                 </div>
-                <Input
+                <FormInput
+                className="text-white"
                   {...register("email")}
                   label="Email"
                   error={errors.email?.message}
@@ -163,7 +167,8 @@ export const Register = () => {
                 <div className="pointer-events-none absolute inset-y-13 left-0 flex items-center pl-3">
                   <FiLock className="h-5 w-5 text-blue-300 group-focus-within:text-blue-400" />
                 </div>
-                <Input
+                <FormInput
+                className="text-white"
                   {...register("password")}
                   label="Password"
                   error={errors.password?.message}
@@ -179,7 +184,8 @@ export const Register = () => {
                 <div className="pointer-events-none absolute inset-y-13 left-0 flex items-center pl-3">
                   <FiLock className="h-5 w-5 text-blue-300 group-focus-within:text-blue-400" />
                 </div>
-                <Input
+                <FormInput
+                className="text-white"
                   {...register("passwordConfirmation")}
                   label="Confirm Password"
                   type="password"

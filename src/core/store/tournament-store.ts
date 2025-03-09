@@ -5,6 +5,7 @@ import { Tournament, TournamentRequest } from '../../types/tournament';
 
 interface TournamentState {
   tournaments: Tournament[];
+  availableTournaments: Tournament[];
   isLoading: boolean;
   error: Record<string, string> | null;
   fetchTournaments: () => Promise<void>;
@@ -14,10 +15,12 @@ interface TournamentState {
   restoreTournament: (id: string) => Promise<void>;
   forceDeleteTournament: (id: string) => Promise<void>;
   getTournamentById: (id: string) => Promise<Tournament | undefined | null>;
+  getAvailableTournaments: () => Promise<void>
 }
 
 export const useTournamentStore = create<TournamentState>((set,get) => ({
   tournaments: [],
+  availableTournaments: [],
   isLoading: false,
   error: null,
   getTournamentById: async (id) => {
@@ -134,5 +137,19 @@ export const useTournamentStore = create<TournamentState>((set,get) => ({
         isLoading: false,
       }));
       toast.success(response.message);
+  },
+
+  getAvailableTournaments: async () => {
+    set({ isLoading: true, error: null });
+    const response = await TournamentService.getAvailableTournaments();
+    if (!response.success) {
+      if (Array.isArray(response.errors)) {
+        response.errors.forEach((err) => toast.error(err.message));
+      } else {
+        toast.error(response.errors?.message || 'Failed to create tournament');
+      }
+      return;
+    }
+    set({ availableTournaments: response.data, isLoading: false });
   },
 }));

@@ -1,20 +1,23 @@
 import { useState } from "react";
 import { HTMLMotionProps, motion } from "framer-motion";
 import { BsExclamationCircle } from "react-icons/bs";
+import { cn } from "../utils/constant/cn";
 interface CustomInputProps extends HTMLMotionProps<"input"> {
     label: string;
     error?: string;
+    className?: string;
   }
-  export const Input = ({
+  export const FormInput = ({
     label,
     error,
+    className,
     ...props
   }: CustomInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
 
   return (
     <div className="w-full space-y-1">
-      <label className="text-sm font-medium text-white ">
+      <label className={cn('text-sm font-medium',className)}>
         {label}
       </label>
       <div className="relative">

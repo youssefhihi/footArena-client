@@ -8,11 +8,12 @@ export interface ApiOptions {
   verbose?: boolean;
   displayProgress?: boolean;
   displaySuccess?: boolean;
+
 }
 
 export const fetchApi = async <T>(
   endpoint: string,
-  options?: ApiOptions
+  options?: ApiOptions,
 ): Promise<ApiResponse<T>> => {
   const authToken = localStorage.getItem('authToken');
 
@@ -21,10 +22,21 @@ export const fetchApi = async <T>(
   };
 
   // Set Content-Type if data is not FormData
-  if (!(options?.data instanceof FormData)) {
-    headers['Content-Type'] = 'application/json';
+  // if (!(options?.data instanceof OrganizationRequest)) {
+  //   console.log('fetchApi: setting content type');
+  // }else {
+  // }
+  
+  if (options?.data && typeof options?.data === 'object') {
+    console.log("is a object");
+    if (Object.values(options?.data).some(value => value instanceof File)) {
+      console.log("is a file");
+      headers['Content-Type'] = 'multipart/form-data';
+    }else{
+      console.log("is not a file");
+      headers['Content-Type'] = 'application/json';
+    }
   }
-
   // Add authorization header if token exists
   if (authToken) {
     headers['Authorization'] = `Bearer ${authToken}`;
@@ -95,7 +107,8 @@ export const fetchApi = async <T>(
         errorMessage = Object.keys(data.errors).map((field) => ({
           field,
           message: data.errors[field],
-        }));
+      }));
+
       } else if (Array.isArray(data.errors)) {
         console.log('array');
         errorMessage = (data.errors as Record<string, string>[]).map(err => err.message || "An error occurred");

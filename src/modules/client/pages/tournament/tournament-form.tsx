@@ -1,20 +1,21 @@
 import { motion } from "framer-motion";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FiAlertCircle, FiSave } from "react-icons/fi";
+import { FiAlertCircle } from "react-icons/fi";
 import ReactQuill from 'react-quill-new';
 import "react-quill/dist/quill.snow.css";
 
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
-import { TournamentRequest } from "../../../types/tournament";
-import { eventBus } from "../../../commun/utils/constant/eventBus";
-import { FormInput } from "../../../commun/components/input";
-import { useTournamentStore } from "../../../core/store/tournament-store";
-import { createTournamentSchema } from "../../../commun/validation/tournament";
-import { Button } from "../components/ui/Button";
+import { TournamentRequest } from "../../../../types/tournament";
+import { useTournamentStore } from "../../../../core/store/tournament-store";
+import { createTournamentSchema } from "../../../../commun/validation/tournament";
+import { eventBus } from "../../../../commun/utils/constant/eventBus";
+import { FormInput } from "../../../../commun/components/input";
+import { Button } from "../../components/ui/button";
 
-export const TournamentForm: React.FC = () => {
+
+export const TournamentFormP: React.FC = () => {
   const { tournamentId } = useParams<{ tournamentId: string }>();
   const isEditMode = Boolean(tournamentId);
   const { isLoading, error, createTournament, updateTournament, getTournamentById } = useTournamentStore();
@@ -28,13 +29,6 @@ export const TournamentForm: React.FC = () => {
     formState: { errors },
   } = useForm<TournamentRequest>({
     resolver: zodResolver(createTournamentSchema),
-    defaultValues: {
-      title: "",
-      description: "",
-      maxParticipants: 0,
-      isTeams: false,
-      startTime: new Date(),
-    },
   });
 
   useEffect(() => {
@@ -60,20 +54,20 @@ export const TournamentForm: React.FC = () => {
       const updated = await updateTournament(tournamentId!, data);
       if (updated) {
         eventBus.emit("tournamentUpdated", "Tournament updated successfully!");
-        navigate("/dashboard/tournaments");
+        navigate("/tournaments");
       }
     } else {
       const created = await createTournament(data);
       if (created) {
         eventBus.emit("tournamentCreated", "Tournament created successfully!");
-        navigate("/dashboard/tournaments");
+        navigate("/tournaments");
       }
     }
   };
 
   return (
     <div className="max-w-2xl mx-auto p-6 rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold mb-6 text-white">
+      <h2 className="text-2xl font-bold mb-6 text-black">
         {isEditMode ? "Edit Tournament" : "Create New Tournament"}
       </h2>
       {error && Array.isArray(error) && (
@@ -84,19 +78,18 @@ export const TournamentForm: React.FC = () => {
         >
           <div className="flex items-center gap-2">
             <FiAlertCircle className="h-5 w-5" />
-          </div>
-          <ul className="mt-2 list-inside list-disc pl-2">
             {error.map((errorItem, index) => (
-              <li key={index}>{Object.values(errorItem)}</li>
+              <p key={index}>{Object.values(errorItem)}</p>
             ))}
-          </ul>
+          </div>
         </motion.div>
       )}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <FormInput label="Title" {...register("title")} error={errors.title?.message} />
+        <FormInput
+        className= "text-black" label="Title" {...register("title")} error={errors.title?.message} />
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-white mb-1">
+          <label className="block text-sm font-medium text-black mb-1">
             Description
           </label>
           <Controller
@@ -106,7 +99,7 @@ export const TournamentForm: React.FC = () => {
               <ReactQuill
                 value={field.value}
                 onChange={field.onChange}
-                className="text-white rounded-md"
+                className="text-black rounded-md"
               />
             )}
           />
@@ -118,6 +111,7 @@ export const TournamentForm: React.FC = () => {
         </div>
 
         <FormInput
+        className= "text-black"
           label="Max Participants"
           type="number"
           {...register("maxParticipants", { valueAsNumber: true })}
@@ -126,6 +120,7 @@ export const TournamentForm: React.FC = () => {
 
         <div className="mb-4">
           <FormInput
+          className= "text-black"
             label="Is Teams Tournament"
             type="checkbox"
             {...register("isTeams")}
@@ -134,6 +129,7 @@ export const TournamentForm: React.FC = () => {
         </div>
 
         <FormInput
+          className= "text-black"
           label="Start Time"
           type="datetime-local"
           {...register("startTime", {
@@ -142,11 +138,10 @@ export const TournamentForm: React.FC = () => {
           error={errors.startTime?.message}
         />
 
-        <Button onClick={() => {}} disabled={isLoading} icon={FiSave}>
+        <Button onClick={() => {}} disabled={isLoading}>
           {isLoading ? (isEditMode ? "Updating..." : "Creating...") : (isEditMode ? "Update Tournament" : "Create Tournament")}
         </Button>
       </form>
     </div>
   );
 };
-

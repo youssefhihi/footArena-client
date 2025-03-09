@@ -1,6 +1,6 @@
-import { organization } from "./organozation";
+import { Organization } from "./organozation";
 
 export interface Participant {
     participantId: string,
-    organization: organization,
+    organization: Organization,
 }

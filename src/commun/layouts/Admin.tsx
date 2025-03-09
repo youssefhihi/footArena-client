@@ -120,7 +120,7 @@ export default function Admin() {
         {/* Sidebar Header */}
         <div className="flex h-16 items-center justify-between px-4">
           <Link to="/dashboard" className="flex items-center space-x-2">
-            <img src={fifaLogo || "/placeholder.svg"} alt="FIFA" className="h-8 w-8" />
+            <img src={fifaLogo} alt="FIFA" className="h-8 w-8" />
             <span className="text-lg font-bold">FIFA Admin</span>
           </Link>
           {isMobile && (
@@ -191,18 +191,6 @@ export default function Admin() {
                         }`}
                       >
                         Create Tournament
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        to="/dashboard/tournaments/categories"
-                        className={`flex items-center rounded-lg px-4 py-2 text-sm transition-colors ${
-                          location.pathname === "/dashboard/tournaments/categories"
-                            ? "bg-blue-700/40 text-white"
-                            : "text-blue-100 hover:bg-blue-800/30"
-                        }`}
-                      >
-                        Categories
                       </Link>
                     </li>
                   </ul>

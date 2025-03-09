@@ -1,8 +1,10 @@
-import { Calendar, Users, Trophy } from "lucide-react"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card"
-import { Badge } from "./ui/badge"
-import { Tournament, TournamentStatus } from "../../../types/tournament"
 
+import { Tournament, TournamentStatus } from "../../../types/tournament"
+import { motion } from "framer-motion"
+import { Button } from "../../admin/components/ui/Button"
+import { BsFillTrophyFill } from "react-icons/bs"
+import { FiCalendar, FiEdit2, FiEye, FiTrash2, FiUsers } from "react-icons/fi"
+import { GiSoccerBall } from "react-icons/gi"
 interface TournamentCardProps {
   tournament: Tournament
 }
@@ -34,44 +36,62 @@ export function TournamentCard({ tournament }: TournamentCardProps) {
         return "bg-gray-100 text-gray-800 hover:bg-gray-100"
     }
   }
-
+  const on = () => {}
   return (
-    <Card className="overflow-hidden transition-all hover:shadow-md">
-      <div className="relative h-40 w-full overflow-hidden bg-gray-200">
-        <img
-          src={tournament.image || "/placeholder.svg?height=160&width=320"}
-          alt={tournament.title}
-          className="h-full w-full object-cover"
-        />
-        <Badge className={`absolute right-2 top-2 ${getStatusColor(tournament.status)}`}>{tournament.status}</Badge>
-      </div>
-      <CardHeader className="pb-2">
-        <CardTitle className="line-clamp-1">{tournament.title}</CardTitle>
-        <CardDescription className="line-clamp-2">{tournament.description}</CardDescription>
-      </CardHeader>
-      <CardContent className="pb-2">
-        <div className="space-y-2 text-sm">
-          <div className="flex items-center text-gray-500">
-            <Calendar className="mr-2 h-4 w-4" />
-            {formatDate(tournament.startTime)}
+    <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="overflow-hidden rounded-xl bg-gray-800 shadow-lg"
+        >
+          <div className="relative h-32 bg-gradient-to-r from-blue-600 to-indigo-600">
+            <div className="absolute inset-0 flex items-center justify-center">
+              <GiSoccerBall className="h-16 w-16 text-white/30" />
+            </div>
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-gray-900/80 to-transparent p-4">
+              <h3 className="text-lg font-bold text-white">{tournament.title}</h3>
+              <div className="flex items-center space-x-2">
+                <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${getStatusColor(tournament.status)}`}>
+                  {tournament.status}
+                </span>
+                <span className="text-xs text-gray-300">{tournament.isTeams}</span>
+              </div>
+            </div>
           </div>
-          <div className="flex items-center text-gray-500">
-            <Users className="mr-2 h-4 w-4" />
-            {tournament.participants.length} / {tournament.maxParticipants} Participants
+    
+          <div className="p-4">
+            <div className="space-y-3">
+              <div className="flex items-center text-sm text-gray-400">
+                <FiCalendar className="mr-2 h-4 w-4" />
+                <span>
+                  {formatDate(tournament.startTime)}
+                </span>
+              </div>
+    
+              <div className="flex items-center text-sm text-gray-400">
+                <FiUsers className="mr-2 h-4 w-4" />
+                <span>{tournament.participants.length} / {tournament.maxParticipants} Participants</span>
+              </div>
+    
+              <div className="flex items-center text-sm text-gray-400">
+                <BsFillTrophyFill className="mr-2 h-4 w-4" />
+                <span> {tournament.isTeams ? "Team Tournament" : "Individual Tournament"}</span>
+              </div>
+            </div>
+            
+            <div className="mt-4 flex space-x-2">
+              <Button onClick={() => on()} icon={FiEye} variant="secondary">
+                View
+              </Button>
+              <Button onClick={() => on()} icon={FiEdit2} variant="primary">
+                Edit
+              </Button>
+              <Button onClick={() => on()} icon={FiTrash2} variant="danger">
+                Delete
+              </Button>
+            </div>
           </div>
-          <div className="flex items-center text-gray-500">
-            <Trophy className="mr-2 h-4 w-4" />
-            {tournament.isTeams ? "Team Tournament" : "Individual Tournament"}
-          </div>
-        </div>
-      </CardContent>
-      <CardFooter className="flex justify-between pt-2">
-        <button className="text-sm font-medium text-blue-600 hover:text-blue-800">View Details</button>
-        {tournament.status === TournamentStatus.NotStarted && (
-          <button className="text-sm font-medium text-green-600 hover:text-green-800">Edit Tournament</button>
-        )}
-      </CardFooter>
-    </Card>
+        </motion.div>
   )
 }
 

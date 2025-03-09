@@ -8,7 +8,7 @@ import { z } from "zod"
 import { useAuthStore } from "../store/auth-store"
 import { FiMail, FiAlertCircle, FiSend } from "react-icons/fi"
 import { resetPasswordSchema } from "../validation/validation"
-import { Input } from "../components/ui/input"
+import { FormInput } from "../../../commun/components/input"
 
 
 
@@ -103,7 +103,8 @@ export const ForgetPassword = () => {
                 <div className="pointer-events-none absolute inset-y-13 left-0 flex items-center pl-3">
                   <FiMail className="h-5 w-5 text-blue-300 group-focus-within:text-blue-400" />
                 </div>
-                <Input
+                <FormInput
+                  className="text-white"
                   {...register("usernameOrEmail")}
                   type="text"
                   label="Username or Email"

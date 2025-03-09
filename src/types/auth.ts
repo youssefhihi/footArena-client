@@ -16,6 +16,7 @@ export interface FullName {
     phoneNumber?: string
     role: Role
     isVerified: boolean
+    profileImage?: string
   }
   
   export interface LoginRequest {

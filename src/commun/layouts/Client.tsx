@@ -1,26 +1,122 @@
 import { useState } from "react"
 import { Outlet, Link, useLocation } from "react-router-dom"
-import { Home, Trophy, Users, BarChart3, Calendar, LogOut, Menu, X, User } from "lucide-react"
+import { Home, Trophy, Users, Calendar, LogOut, Menu, X, User } from "lucide-react"
 import { cn } from "../utils/constant/cn"
+import { ToastContainer } from "react-toastify"
+import { FiChevronDown } from "react-icons/fi"
+import { AnimatePresence, motion } from "framer-motion"
+// const sidebarItems = [
+//   { text: "Dashboard", icon: Home, path: "/c/dashboard" },
+//   { text: "Tournaments", icon: Trophy, path: "/c/tournaments" },
+// { text: "Participated", icon: Calendar, path: "/c/participated-tournaments" },
+//   { text: "Organizations", icon: Users, path: "/c/organizations" },
+//   { text: "Statistics", icon: BarChart3, path: "/statistics" },
+// ]
 
-const sidebarItems = [
-  { name: "Dashboard", icon: Home, path: "/" },
-  { name: "My Tournaments", icon: Trophy, path: "/tournaments" },
-  { name: "Participated", icon: Calendar, path: "/participated" },
-  { name: "Organizations", icon: Users, path: "/organizations" },
-  { name: "Statistics", icon: BarChart3, path: "/statistics" },
-]
+type SidebarItemProps = {
+  icon: React.ReactNode;
+  text: string;
+  to: string;
+  isActive: boolean;
+  hasSubmenu?: boolean;
+  isSubmenuOpen?: boolean;
+  toggleSubmenu?: () => void;
+  onClick?: () => void;
+};
+const SidebarItem = ({
+  icon,
+  text,
+  to,
+  isActive,
+  hasSubmenu = false,
+  isSubmenuOpen = false,
+  toggleSubmenu,
+  onClick,
+}: SidebarItemProps) => {
+  return (
+    <ul>
+    <li>
+      <Link
+        to={to}
+        className={`group  transition-all duration-200  flex items-center space-x-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors${
+          isActive
+            ? "bg-green-700 text-white"
+            : "text-gray-200 hover:bg-green-700/50"
+        }`}
+        onClick={onClick || (hasSubmenu ? toggleSubmenu : undefined)}
+      >
+        <span className="mr-3 flex h-6 w-6 items-center justify-center">
+          {icon}
+        </span>
+        <span className="flex-1">{text}</span>
+        {hasSubmenu && (
+          <motion.span
+            animate={{ rotate: isSubmenuOpen ? 180 : 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <FiChevronDown />
+          </motion.span>
+        )}
+      </Link>
+      
+      </li>
+    </ul>
+  );
+};
 
+const SubmenuItem = ({ text, to , isopen}: { text: string; to: string, isopen: boolean }) => {
+  return (
+    <AnimatePresence>
+      {isopen && (
+        <motion.div
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: "auto", opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="overflow-hidden"
+        >
+          <ul className="ml-6 space-y-1 pt-1">
+            <li>
+              <Link
+                to={to}
+                className={`flex items-center rounded-lg px-4 py-2 text-sm transition-colors ${
+                  location.pathname === to
+                    ? "bg-green-700 text-white"
+                    : "text-gray-200 hover:bg-green-700/50"
+                }`}
+              >
+                {text}
+              </Link>
+            </li>
+          </ul>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
 export default function ClientLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+  const [isTournamentSubmenuOpen, setIsTournamentSubmenuOpen] = useState(false);
+
   const location = useLocation()
 
   return (
     <div className="flex h-screen bg-gray-100">
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       {/* Sidebar */}
       <div
         className={cn(
-          "fixed inset-y-0 left-0 z-50 w-64 bg-gradient-to-b from-green-800 to-blue-900 text-white transition-transform duration-300 ease-in-out md:relative md:translate-x-0",
+          "fixed inset-y-0 left-0 z-50 w-64 bg-gradient-to-b from-gray-900/80 to-blue-900 text-white transition-transform duration-300 ease-in-out md:relative md:translate-x-0",
           isSidebarOpen ? "translate-x-0" : "-translate-x-full",
         )}
       >
@@ -47,20 +143,46 @@ export default function ClientLayout() {
             </div>
           </div>
 
-          <nav className="space-y-1">
-            {sidebarItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.path}
-                className={cn(
-                  "flex items-center space-x-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors",
-                  location.pathname === item.path ? "bg-green-700 text-white" : "text-gray-200 hover:bg-green-700/50",
-                )}
-              >
-                <item.icon className="h-5 w-5" />
-                <span>{item.name}</span>
-              </Link>
-            ))}
+          <nav className="space-y-1 overflow-y-scroll">
+            <SidebarItem
+              icon={<Home size={20} />}
+              text="Dashboard"
+              to="/c/dashboard"
+              isActive={location.pathname === "/c/dashboard"}
+            />
+            <SidebarItem
+              icon={<Trophy size={20} />}
+              text="Tournaments"
+              to="/c/tournaments"
+              isActive={location.pathname === "/c/tournaments"}
+              hasSubmenu={true}
+              isSubmenuOpen={isTournamentSubmenuOpen}
+              toggleSubmenu={() => setIsTournamentSubmenuOpen(!isTournamentSubmenuOpen)}
+
+            />
+           <SubmenuItem text="Tournaments" to="/c/tournaments" isopen={isTournamentSubmenuOpen} />
+           <SubmenuItem text="My Tournaments" to="/c/tournaments/me" isopen={isTournamentSubmenuOpen} />
+           <SubmenuItem text="create" to="/c/tournaments/create" isopen={isTournamentSubmenuOpen} />
+           <SubmenuItem text="participated" to="/c/participated-tournaments" isopen={isTournamentSubmenuOpen} />
+           
+            <SidebarItem
+              icon={<Calendar size={20} />}
+              text="Participated"
+              to="/c/participated-tournaments"
+              isActive={location.pathname === "/c/participated-tournaments"}
+            />
+            <SidebarItem
+              icon={<Users size={20} />}
+              text="Organizations"
+              to="/c/organizations"
+              isActive={location.pathname === "/c/organizations"}
+            />
+            <SidebarItem
+              icon={<User size={20} />}
+              text="Profile"
+              to="/c/profile"
+              isActive={location.pathname === "/c/profile"}
+            />
           </nav>
         </div>
 

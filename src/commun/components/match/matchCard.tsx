@@ -1,8 +1,8 @@
 import { GiWhistle } from "react-icons/gi";
-import { Match } from "../../../../types/Match";
+import { Match } from "../../../types/Match";
 import { motion } from "framer-motion"
 import { FiMessageSquare } from "react-icons/fi";
-import { formatDate } from "../../../../commun/utils/constant/date-formater";
+import { formatDate } from "../../utils/constant/date-formater";
 interface MatchProps {
   match: Match;
 

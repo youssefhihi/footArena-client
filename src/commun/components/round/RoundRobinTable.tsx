@@ -1,4 +1,4 @@
-import { Round } from "../../../../types/Round";
+import { Round } from "../../../types/Round";
 
 interface RoundRobinProps {
   rounds: Round[];

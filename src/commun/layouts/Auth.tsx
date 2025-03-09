@@ -65,7 +65,7 @@ export function Auth() {
         <motion.div
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.3 }}
           className="mb-8 flex items-center justify-center"
         >
           <img src={logo} alt="FIFA Logo" className="h-16" />
@@ -82,7 +82,7 @@ export function Auth() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.3 }}
             className="w-full max-w-md"
           >
             <Outlet />

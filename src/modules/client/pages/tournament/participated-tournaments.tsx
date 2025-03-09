@@ -1,20 +1,20 @@
 
 import { useState } from "react"
 import { Search, Filter, ChevronDown, Calendar } from "lucide-react"
-import { TournamentCard } from "../components/TournamentCard"
+import { TournamentCard } from "../../components/TournamentCard"
 
-import { Button } from "../components/ui/button"
-import { Input } from "../components/ui/input"
+import { Button } from "../../components/ui/button"
+import { Input } from "../../components/ui/input"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../components/ui/dropdown-menu"
-import { MatchesTable } from "../components/MatchesTable"
-import { TournamentStatus } from "../../../types/tournament"
-import { mockMatches, mockTournaments } from "./data"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs"
+} from "../../components/ui/dropdown-menu"
+import { MatchesTable } from "../../components/MatchesTable"
+import { TournamentStatus } from "../../../../types/tournament"
+import { mockMatches, mockTournaments } from "../data"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
 
 export default function ParticipatedTournaments() {
   const [searchQuery, setSearchQuery] = useState("")

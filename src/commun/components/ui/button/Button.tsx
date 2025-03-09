@@ -3,7 +3,7 @@ import { HTMLMotionProps, motion } from "framer-motion";
 interface CustomInputProps extends HTMLMotionProps<"button"> {
   loading: boolean;
 }
-export const Button = ({
+export const FormButton = ({
   children,
   loading,
   ...props

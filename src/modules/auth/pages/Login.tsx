@@ -11,7 +11,7 @@ import { useEffect } from "react"
 import { toast } from "react-toastify"
 import { eventBus } from "../../../commun/utils/constant/eventBus"
 import { FiUser, FiLock, FiLogIn, FiAlertCircle } from "react-icons/fi"
-import { Input } from "../components/ui/input"
+import { FormInput } from "../../../commun/components/input"
 
 type LoginFormData = z.infer<typeof loginSchema>
 
@@ -120,7 +120,8 @@ export const Login = () => {
                 <div className="pointer-events-none absolute inset-y-13 left-0 flex items-center pl-3">
                   <FiUser className="h-5 w-5 text-blue-300 group-focus-within:text-blue-400" />
                 </div>
-                <Input
+                <FormInput
+                className="text-white"
                   {...register("usernameOrEmail")}
                   type="text"
                   label="Username or Email"
@@ -136,7 +137,8 @@ export const Login = () => {
                 <div className="pointer-events-none absolute inset-y-13 left-0 flex items-center pl-3">
                   <FiLock className="h-5 w-5 text-blue-300 group-focus-within:text-blue-400" />
                 </div>
-                <Input
+                <FormInput
+                className="text-white"
                   {...register("password")}
                   label="Password"
                   type="password"
