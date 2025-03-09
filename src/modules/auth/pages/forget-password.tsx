@@ -14,7 +14,7 @@ import { FormInput } from "../../../commun/components/input"
 
 type ForgotPasswordFormData = z.infer<typeof resetPasswordSchema>
 
-export const ForgetPassword = () => {
+export default function ForgetPassword(){
   const { resetPassword, isLoading, error } = useAuthStore()
   const {
     handleSubmit,

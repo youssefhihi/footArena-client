@@ -9,8 +9,8 @@ import { Button } from "../ui/Button"
 interface TournamentCardProps {
   tournament: Tournament
   onView: (tournament: Tournament) => void
-  onEdit: (tournament: Tournament) => void
-  onDelete: (tournament: Tournament) => void
+  onEdit?: (tournament: Tournament) => void
+  onDelete?: (tournament: Tournament) => void
 }
 
 export const TournamentCard: React.FC<TournamentCardProps> = ({ tournament, onView, onEdit, onDelete }) => {
@@ -80,16 +80,21 @@ export const TournamentCard: React.FC<TournamentCardProps> = ({ tournament, onVi
           </div>
         </div>
 
-        <div className="mt-4 flex space-x-2">
+        <div className="mt-4 flex  justify-center space-x-2">
           <Button onClick={() => onView(tournament)} icon={FiEye} variant="secondary">
             View
           </Button>
-          <Button onClick={() => onEdit(tournament)} icon={FiEdit2} variant="primary">
-            Edit
-          </Button>
-          <Button onClick={() => onDelete(tournament)} icon={FiTrash2} variant="danger">
-            Delete
-          </Button>
+          {
+            onEdit && onDelete &&
+            <>
+            <Button onClick={() => onEdit(tournament)} icon={FiEdit2} variant="primary">
+              Edit
+            </Button>
+            <Button onClick={() => onDelete(tournament)} icon={FiTrash2} variant="danger">
+              Delete
+            </Button>
+          </>
+          }
         </div>
       </div>
     </motion.div>

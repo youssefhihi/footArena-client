@@ -1,7 +1,9 @@
+import { Participant, ParticipantRequest } from './../../types/participant';
 import { create } from 'zustand';
 import TournamentService from '../service/tournament-service';
 import { toast } from 'react-toastify';
 import { Tournament, TournamentRequest } from '../../types/tournament';
+import { ParticipantService } from '../service/participant-service';
 
 interface TournamentState {
   tournaments: Tournament[];
@@ -15,7 +17,8 @@ interface TournamentState {
   restoreTournament: (id: string) => Promise<void>;
   forceDeleteTournament: (id: string) => Promise<void>;
   getTournamentById: (id: string) => Promise<Tournament | undefined | null>;
-  getAvailableTournaments: () => Promise<void>
+  getAvailableTournaments: () => Promise<void>;
+  participateToTournament: (data: ParticipantRequest) => Promise<Participant | undefined>;
 }
 
 export const useTournamentStore = create<TournamentState>((set,get) => ({
@@ -151,5 +154,21 @@ export const useTournamentStore = create<TournamentState>((set,get) => ({
       return;
     }
     set({ availableTournaments: response.data, isLoading: false });
+  },
+
+  participateToTournament: async (data) => {
+    set({ isLoading: true, error: null });
+      const response = await ParticipantService.participateTotournament(data);
+      if (!response.success) {
+        set({ error: response.errors, isLoading: false });
+        if (Array.isArray(response.errors)) {
+          response.errors.forEach((err) => toast.error(err));
+        } else {
+          toast.error(response.errors?.message || 'Failed to Join this tournament');
+        }
+        return;
+      }
+      set({ isLoading: false });
+      return response.data;
   },
 }));

@@ -1,19 +1,21 @@
 import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { format } from "date-fns"
-import { FiCalendar, FiUsers, FiAward, FiInfo, FiList, FiActivity } from "react-icons/fi"
+import {  FiUsers, FiInfo, FiList, FiActivity } from "react-icons/fi"
 import { useParams } from "react-router-dom"
 import { useTournamentStore } from "../../../../core/store/tournament-store"
 import { Tournament } from "../../../../types/tournament"
 import { useMatchStore } from "../../../../core/store/match-store"
 import { useRoundStore } from "../../../../core/store/round-store"
-import { Frown } from "lucide-react";
-import { formatDate } from "../../../../commun/utils/constant/date-formater"
 import { OrganizationCard } from "../../../../commun/components/organization/organization-card"
 import { RoundRobinTable } from "../../../../commun/components/round/RoundRobinTable"
 import { TournamentDetails } from "../../../../commun/components/tournament/tournament-details"
 import { MatchCard } from "../../../../commun/components/match/matchCard"
 import { Organization } from "../../../../types/organozation"
+import { TournamentHeader } from "../../../../commun/components/tournament/tournament-bar"
+import { MdOutlineGroupAdd } from "react-icons/md";
+import { FormButton } from "../../../../commun/components/ui/button/Button"
+import { useOrganizationStore } from "../../store/organization-store"
 
 
 
@@ -23,18 +25,26 @@ const tabs = [
   { id: "table", label: "Table", icon: FiList },
   { id: "matches", label: "Matches", icon: FiActivity },
   { id:"participants", label: "Participants", icon: FiUsers },
+  { id:"join", label: "Join Tournament", icon:  MdOutlineGroupAdd},
 ]
 
 export default function TournamentuInfo() {
   const [activeTab, setActiveTab] = useState("overview")
   const [tournament, setTournament] = useState<Tournament | undefined | null>();
+  const [ isOwner , setIsOwner] = useState<boolean>(false);
+  const [ selectedOrganization, setSelectedOrganization ] = useState<Organization>();
+  const [ showModal, setShowModal ] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState("")
   const { tournamentId } = useParams<{ tournamentId: string }>();
-  const {  getTournamentById } = useTournamentStore();
+  const {  getTournamentById, participateToTournament } = useTournamentStore();
   const { matches, fetchTournamentMatches } = useMatchStore();
   const { rounds , fetchTournamentRounds } = useRoundStore();
+  const { organizations , fetchOwnOrganization } = useOrganizationStore();
+  
 
   const fetchTournament = async () => {
       const tournament = await getTournamentById(tournamentId!);
+      
       setTournament(tournament);
   };
 
@@ -49,46 +59,28 @@ export default function TournamentuInfo() {
   const handleViewOrganization = (organization: Organization) => {
     console.log("Viewing organization:", organization);
   }
+
+  const joinTournament = async () => {
+    if(!tournament) return
+    if(selectedOrganization){
+     const participant = await participateToTournament({tournament: tournamentId!, organization: selectedOrganization.organizationId!});
+      tournament.participants.push(participant!);
+    } 
+  }
+
+  const showJoinTournamentModel = () => {
+    setShowModal(true);
+    fetchOwnOrganization();
+  }
+  const filteredOrganizations = organizations.filter(
+    (org) =>
+      org.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      org.description.toLowerCase().includes(searchQuery.toLowerCase()),
+  )
   return (
     <div className="min-h-screen ">
       {/* Tournament Header */}
-      <div className="relative bg-gradient-to-r from-blue-700 to-green-400 px-4 py-8 sm:px-6 lg:px-8 rounded-lg">
-        <div className="relative mx-auto max-w-7xl">
-          <div className="md:flex md:items-center md:justify-between">
-            {tournament ? (
-              <div className="min-w-0 flex-1">
-                <h2 className="text-2xl font-bold leading-7 text-white sm:truncate sm:text-3xl sm:tracking-tight pb-5">
-                  {tournament.title}
-                </h2>
-                <div className="mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
-                  <div className="mt-2 flex items-center text-sm text-blue-100">
-                    <FiCalendar className="mr-1.5 h-5 w-5 flex-shrink-0" />
-                    {formatDate(tournament.startTime)}
-                  </div>
-                  <div className="mt-2 flex items-center text-sm text-blue-100">
-                    <FiUsers className="mr-1.5 h-5 w-5 flex-shrink-0" />
-                    {tournament.maxParticipants} Participants
-                  </div>
-                  <div className="mt-2 flex items-center text-sm text-blue-100">
-                    <FiAward className="mr-1.5 h-5 w-5 flex-shrink-0" />
-                    {tournament.isTeams ? "Teams" : "Individual"}
-                  </div>
-                </div>
-              </div>
-            ) : ( 
-              <div className="w-full text-center py-10">
-                <h2 className="text-2xl font-bold text-white flex items-center justify-center gap-2">
-                  <Frown className="w-8 h-8 text-white" />
-                  <span>Tournament Not Found</span>
-                </h2>
-                <p className="text-blue-200">
-                  The requested tournament does not exist or has been deleted.
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
+      <TournamentHeader tournament={tournament}className="bg-gradient-to-r from-blue-700 to-green-400" />
 
       {/* Navigation Tabs */}
       <div className="border-b border-gray-800">
@@ -170,6 +162,22 @@ export default function TournamentuInfo() {
               <RoundRobinTable rounds={rounds} />
             )}
 
+            {tournament &&  activeTab === "join" && (
+              <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="overflow-hidden rounded-lg bg-gray-600 shadow p-6 flex flex-col items-center justify-center"
+            >
+              <div className="text-center">
+                <div className="text-5xl">⚽️</div>
+                <h3 className="my-4 text-lg font-medium text-white">
+                  Take the Challenge and Join this Tournament
+                </h3>
+                <FormButton loading={false} onClick={showJoinTournamentModel} > Join Tournament</FormButton>
+              </div>
+            </motion.div>
+            )}
+
             {tournament &&  activeTab === "participants" && (
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                   {tournament.participants.map((participant) => (
@@ -207,6 +215,105 @@ export default function TournamentuInfo() {
           </motion.div>
         </AnimatePresence>
       </div>
+       {/* Add Member Modal */}
+            {showModal && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+                <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
+                  <h2 className="mb-4 text-lg font-semibold">Add Team Member</h2>
+      
+                  {!selectedOrganization ? (
+                    <>
+                      <div className="mb-4 flex">
+                        <input
+                          type="text"
+                          placeholder="Search users by name or email"
+                          className="w-full rounded-md border border-gray-300 px-3 py-2"
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                      </div>
+      
+                      <div className="max-h-60 overflow-y-auto rounded-md border">
+                        {filteredOrganizations ? (
+                          <ul className="divide-y">
+                            {filteredOrganizations.map((organization, index) => (
+                              
+                              <li
+                                key={index}
+                                className="flex cursor-pointer items-center p-3 hover:bg-gray-50"
+                                onClick={() => setSelectedOrganization(organization)}
+                              >
+                                <div className="mr-3 h-8 w-8 overflow-hidden rounded-full bg-gray-200">
+                                  <img
+                                    src={organization.logo || "/placeholder.svg?height=32&width=32"}
+                                    alt={organization.name}
+                                    className="h-full w-full object-cover"
+                                  />
+                                </div>
+                                <div>
+                                  <div className="font-medium">{organization.name}</div>
+                                  <div className="text-xs text-gray-500">{organization.teamMembers.length} members</div>
+                                </div>
+                              </li>
+                            ))}
+                          </ul>
+                        ) : (
+                          
+                          <div className="flex h-32 flex-col items-center justify-center p-4 text-center">
+                            <p className="text-sm font-medium text-gray-500">No users found</p>
+                            <p className="text-xs text-gray-400">Try a different search term</p>
+                          </div>
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="mb-4 flex items-center space-x-3 rounded-md border p-3">
+                        <div className="h-10 w-10 overflow-hidden rounded-full bg-gray-200">
+                          <img
+                            src={selectedOrganization.logo || "/placeholder.svg?height=40&width=40"}
+                            alt={selectedOrganization.name}
+                            className="h-full w-full object-cover"
+                          />
+                        </div>
+                        <div>
+                          <div className="font-medium">{selectedOrganization.name}</div>
+                          <div className="text-xs text-gray-500">{selectedOrganization.teamMembers.length} members</div>
+                        </div>
+                        <button
+                          className="ml-auto text-sm text-blue-600 hover:text-blue-800"
+                          onClick={() => setSelectedOrganization(undefined)}
+                        >
+                          Change
+                        </button>
+                      </div>
+                    </>
+                  )}
+      
+                  <div className="mt-4 flex justify-end space-x-3">
+                    <button
+                      className="rounded-md border px-4 py-2 hover:bg-gray-50"
+                      onClick={() => {
+                        setShowModal(false)
+                        setSelectedOrganization(undefined)
+                        setSearchQuery("")
+                      }}
+                    >
+                      Cancel
+                    </button>
+      
+                    {selectedOrganization && (
+                      <button
+                        className="rounded-md bg-[#0FFF50] px-4 py-2 font-medium text-black hover:bg-opacity-90"
+                        onClick={joinTournament}
+                      >
+                        JoinTournament
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
     </div>
   )
 }

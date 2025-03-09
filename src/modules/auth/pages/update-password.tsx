@@ -14,7 +14,7 @@ import { FiLock, FiAlertCircle, FiCheckCircle } from "react-icons/fi"
 
 type UpdatePasswordFormData = z.infer<typeof updatePasswordSchema>
 
-export const UpdatePassword = () => {
+export default function UpdatePassword (){
   const { updatePassword, isLoading, error } = useAuthStore()
   const {
     register,

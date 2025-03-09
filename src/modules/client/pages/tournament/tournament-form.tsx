@@ -15,7 +15,7 @@ import { FormInput } from "../../../../commun/components/input";
 import { Button } from "../../components/ui/button";
 
 
-export const TournamentFormP: React.FC = () => {
+export default function  TournamentFormP() {
   const { tournamentId } = useParams<{ tournamentId: string }>();
   const isEditMode = Boolean(tournamentId);
   const { isLoading, error, createTournament, updateTournament, getTournamentById } = useTournamentStore();

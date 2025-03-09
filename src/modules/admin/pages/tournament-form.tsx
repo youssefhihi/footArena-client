@@ -14,7 +14,7 @@ import { useTournamentStore } from "../../../core/store/tournament-store";
 import { createTournamentSchema } from "../../../commun/validation/tournament";
 import { Button } from "../components/ui/Button";
 
-export const TournamentForm: React.FC = () => {
+export default function TournamentForm(){
   const { tournamentId } = useParams<{ tournamentId: string }>();
   const isEditMode = Boolean(tournamentId);
   const { isLoading, error, createTournament, updateTournament, getTournamentById } = useTournamentStore();

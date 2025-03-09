@@ -12,7 +12,7 @@ import { FormInput} from "../../../commun/components/input"
 
 type RegisterFormData = z.infer<typeof registerSchema>
 
-export const Register = () => {
+export default function Register() {
   const { registerUser, isLoading, error } = useAuthStore()
   const {
     handleSubmit,
