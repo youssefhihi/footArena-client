@@ -15,14 +15,14 @@ const Statistics = lazy(() => import("../modules/client/pages/statistic"));
 const Dashboard = lazy(() => import("../modules/client/pages/dashboard"));
 const DashboardHome = lazy(() => import("../modules/admin/pages/dashboard"));
 const TournamentManagement = lazy(() => import("../modules/admin/layouts/tournament"));
-const TournamentList = lazy(() => import("../modules/admin/pages/Tournament-list"));
-const TournamentForm = lazy(() => import("../modules/admin/pages/tournament-form"));
-const TournamentInfo = lazy(() => import("../modules/admin/pages/tournament-info"));
+const TournamentList = lazy(() => import("../modules/admin/pages/tournament/tournament-list"));
+const TournamentForm = lazy(() => import("../modules/admin/pages/tournament/tournament-form"));
+const TournamentInfo = lazy(() => import("../modules/admin/pages/tournament/tournament-info"));
 const TournamentuInfo = lazy(() => import("../modules/client/pages/tournament/tournament-info"));
 const TournamentFormP = lazy(() => import("../modules/client/pages/tournament/tournament-form"));
 const OrganizationForm = lazy(() => import("../modules/client/pages/organization/organization-form"));
 const OrganizationInfo = lazy(() => import("../modules/client/pages/organization/organization-info"));
-const AvailableTournaments = lazy(() => import("../modules/client/pages/tournament/available-tournaments"));
+const AvailableTournaments = lazy(() => import("../modules/client/pages/tournament/available-tournament"));
 
 
 const AppRouter = () => {
@@ -37,17 +37,19 @@ const AppRouter = () => {
           </Route>
           <Route path="/c" element={<ClientLayout />}>
             <Route path="dashboard" element={<Dashboard/>}/>
-            <Route path="tournaments/me" element={<TournamentsManagement/>}/>
-            <Route path="tournaments" element={<AvailableTournaments/>}/>
-            <Route path="tournaments/:tournamentId" element={<TournamentuInfo/>}/>
+            <Route path="tournaments" element={<TournamentManagement />} >
+              <Route path="" element={<TournamentsManagement/>}/>
+              <Route path="available" element={<AvailableTournaments/>}/>
+              <Route path=":tournamentId" element={<TournamentuInfo/>}/>
+              <Route path="create" element={<TournamentFormP/>}/>
+              <Route path="edit/:tournamentId" element={<TournamentFormP/>}/>
+            </Route>
             <Route path="organizations" element={<Organizations/>}/>
             <Route path="organizations/create" element={<OrganizationForm/>}/>
             <Route path="organizations/edit/:organizationId" element={<OrganizationForm/>}/>
             <Route path="organizations/:organizationId" element={<OrganizationInfo/>}/>
             <Route path="participated-tournaments" element={<ParticipatedTournaments/>}/>
             <Route path="statistics" element={<Statistics/>}/>
-            <Route path="tournaments/create" element={<TournamentFormP/>}/>
-            <Route path="tournaments/edit/:tournamentId" element={<TournamentFormP/>}/>
           </Route>
           {/* Dashboard Routes */}
           <Route path="/dashboard" element={<Admin />}>

@@ -9,7 +9,7 @@ interface TournamentDetailsProps {
 }
 export const TournamentDetails: React.FC<TournamentDetailsProps> = ({className, tournament }) => {
     return (
-      <div className={cn('rounded-lg  p-6', className)}>
+      <div className={cn('bg-gray-800 rounded-lg  p-6', className)}>
         <h3 className="text-lg font-medium text-white">Tournament Information</h3>
         <div className="mt-4 space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">

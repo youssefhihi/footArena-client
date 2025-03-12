@@ -16,8 +16,9 @@ export const useRoundStore = create<RoundState>((set, get) => ({
     error: null,
     fetchTournamentRounds: async (tournamentId) => {
         set({ isLoading: true, error: null });
-        if (get().rounds.length > 0) {
-            set({ isLoading: false });
+        const existingRounds = get().rounds.filter((round) => round.participant.tournament.tournamentId === tournamentId);
+        if (existingRounds.length > 0) {
+         set({ isLoading: false });
             return;
         }
         const response = await RoundService.getTournamentRounds(tournamentId);
@@ -26,6 +27,9 @@ export const useRoundStore = create<RoundState>((set, get) => ({
             toast.error(response.message);
             return;
         }
-        set({ rounds: response.data, isLoading: false });
+        set((state) => ({       
+              rounds: [...state.rounds, ...(response.data as Round[])],
+             isLoading: false 
+            }));
     },
 }));

@@ -4,7 +4,7 @@ import { Organization } from "../../../types/organozation"
 import { Avatar, AvatarFallback, AvatarImage } from "../../../modules/client/components/ui/avatar"
 import { Badge } from "../../../modules/client/components/ui/badge"
 import { FiEdit2, FiEye, FiTrash2 } from "react-icons/fi"
-import { Button } from "../../../modules/admin/components/ui/Button"
+import { Button } from "../tournament/Button"
 
 interface OrganizationCardProps {
   organization: Organization,

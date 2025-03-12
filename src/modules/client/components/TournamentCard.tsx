@@ -1,7 +1,7 @@
 
 import { Tournament, TournamentStatus } from "../../../types/tournament"
 import { motion } from "framer-motion"
-import { Button } from "../../admin/components/ui/Button"
+import { Button } from "../../../commun/components/tournament/Button"
 import { BsFillTrophyFill } from "react-icons/bs"
 import { FiCalendar, FiEdit2, FiEye, FiTrash2, FiUsers } from "react-icons/fi"
 import { GiSoccerBall } from "react-icons/gi"

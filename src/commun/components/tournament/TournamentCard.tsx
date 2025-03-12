@@ -3,8 +3,8 @@ import { motion } from "framer-motion"
 import { FiCalendar, FiUsers, FiEye, FiEdit2, FiTrash2 } from "react-icons/fi"
 import { GiSoccerBall } from "react-icons/gi"
 import { BsFillTrophyFill } from "react-icons/bs"
-import { Tournament, TournamentStatus } from "../../../../types/tournament"
-import { Button } from "../ui/Button"
+import { Tournament, TournamentStatus } from "../../../types/tournament"
+import { Button } from "./Button"
 
 interface TournamentCardProps {
   tournament: Tournament

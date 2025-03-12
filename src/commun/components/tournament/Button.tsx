@@ -1,6 +1,6 @@
 import type React from "react"
 import type { IconType } from "react-icons"
-import { cn } from "../../../../commun/utils/constant/cn"
+import { cn } from "../../utils/constant/cn"
 
 interface ButtonProps {
   onClick: () => void

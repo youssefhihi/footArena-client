@@ -1,23 +1,39 @@
 import { Carts } from './Carts';
-import { Participant } from './participant';
+import { ParticipantTournament } from './participant';
 export interface Match {
         matchId: string,
-        participant1: Participant
-        participant2: Participant,
+        participant1: ParticipantTournament,
+        participant2: ParticipantTournament,
         comments:string,
         matchResult: MatchResult,
-        matchCarts: MatchCarts,
+        carts: MatchCarts,
         matchTime: string,
         createdAt: string,
         updatedAt: string
 }
 
+
+
 export interface MatchResult{
-    Participant1: number,
-    Participant2: number
+    participant1: number,
+    participant2: number
 }
 
 export interface MatchCarts{
     participant1: Carts,
     participant2: Carts,
+}
+
+export interface MatchRequest {
+    startTime: string,
+    intervalDays: number,
+    matchesPerDay: number,
+    roundGapHours: number
+}
+
+
+export interface UpdateMatchRequest {
+    comments?: string,
+    matchResult: MatchResult,
+    carts: MatchCarts
 }

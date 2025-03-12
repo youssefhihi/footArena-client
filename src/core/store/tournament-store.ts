@@ -147,7 +147,7 @@ export const useTournamentStore = create<TournamentState>((set,get) => ({
     const response = await TournamentService.getAvailableTournaments();
     if (!response.success) {
       if (Array.isArray(response.errors)) {
-        response.errors.forEach((err) => toast.error(err.message));
+        response.errors.forEach((err) => toast.error(err));
       } else {
         toast.error(response.errors?.message || 'Failed to create tournament');
       }
@@ -168,7 +168,10 @@ export const useTournamentStore = create<TournamentState>((set,get) => ({
         }
         return;
       }
-      set({ isLoading: false });
+      set({ 
+        availableTournaments: [...get().availableTournaments.map((t) => t.tournamentId === data.tournament ? {...t, participants: [...t.participants, response.data ?? {} as Participant]} : t)],
+        isLoading: false });
+      toast.success(response.message);
       return response.data;
   },
 }));

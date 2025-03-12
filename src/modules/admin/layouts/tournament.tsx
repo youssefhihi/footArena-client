@@ -4,18 +4,12 @@ import { FiPlus} from "react-icons/fi"
 import { Outlet } from "react-router-dom"
 import { useEffect } from "react";
 import { toast } from "react-toastify";
-import { useTournamentStore } from "../../../core/store/tournament-store";
 import { eventBus } from "../../../commun/utils/constant/eventBus";
-import { Button } from "../components/ui/Button";
+import { Button } from "../../../commun/components/tournament/Button";
 
 
 
 export default function TournamentManagement() {
-  const {fetchTournaments} = useTournamentStore();
-
-      useEffect(() => {
-          fetchTournaments();
-      }, [fetchTournaments]);
 
       
     useEffect(() => {

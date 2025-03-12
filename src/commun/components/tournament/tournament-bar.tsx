@@ -11,7 +11,7 @@ interface TournamentHeaderProps {
 }
 export const TournamentHeader: React.FC<TournamentHeaderProps> = ({className, tournament }) => {
     return (
-    <div className={cn(className,'relative  px-4 py-8 sm:px-6 lg:px-8 rounded-lg')}>
+    <div className={cn(className,'relative  px-4 py-8 sm:px-6 lg:px-8 rounded-lg bg-gradient-to-r from-blue-800 to-indigo-400')}>
         <div className="relative mx-auto max-w-7xl">
           <div className="md:flex md:items-center md:justify-between">
             {tournament ? (
