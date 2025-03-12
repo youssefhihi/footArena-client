@@ -1,21 +1,23 @@
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
-import { FiPlus, FiFilter, FiDownload, FiChevronLeft, FiChevronRight, FiTrash2 } from "react-icons/fi"
+import { FiPlus, FiFilter, FiChevronLeft, FiChevronRight, FiTrash2 } from "react-icons/fi"
 import { GiTrophy } from "react-icons/gi"
-import { Tournament } from "../../../types/tournament"
-import { useTournamentStore } from "../../../core/store/tournament-store"
-import { useNavigate } from "react-router-dom"
-import { SearchBar } from "../components/tournament/SearchBar"
-import { TournamentCard } from "../components/tournament/TournamentCard"
-import { Button } from "../components/ui/Button"
+import { useLocation, useNavigate } from "react-router-dom";
+import { useTournamentStore } from "../../../../core/store/tournament-store";
+import { Tournament } from "../../../../types/tournament";
+import { SearchBar } from "../SearchBar";
+import { Button } from "../Button";
+import { TournamentCard } from "../TournamentCard";
+
 
 
 
 // Tournament Management Component
-export default function TournamentList() {
+export default function List() {
   const navigate = useNavigate();
-    const { tournaments, softDeleteTournament } = useTournamentStore();
+  const location = useLocation();
+    const { tournaments, softDeleteTournament,fetchTournaments } = useTournamentStore();
     const [searchTerm, setSearchTerm] = useState("")
     const [currentPage, setCurrentPage] = useState(1)
     const [selectedTournament, setSelectedTournament] = useState<Tournament>()
@@ -27,6 +29,9 @@ export default function TournamentList() {
     })
 
 
+      useEffect(() => {
+          fetchTournaments();
+      }, [fetchTournaments]);
 
       
   const tournamentsPerPage = 5
@@ -53,11 +58,18 @@ export default function TournamentList() {
 
   // Handle tournament actions
   const handleViewTournament = (tournament: Tournament) => {
-    navigate(`/dashboard/tournaments/${tournament.tournamentId}`)
+    const path = location.pathname;
+  
+    // Absolute navigation with leading slash
+    if (path === "dashboard/tournaments") {
+      navigate(`/dashboard/tournaments/${tournament.tournamentId}`, { replace: true });
+    } else {
+      navigate(`/c/tournaments/${tournament.tournamentId}`, { replace: true });
+    }
   }
 
   const handleEditTournament = (tournament: Tournament) => {
-    navigate(`/dashboard/tournaments/edit/${tournament.tournamentId}`)
+    navigate(`${location.pathname}/edit/${tournament.tournamentId}`)
   }
 
   const handleDeleteTournament = (tournament: Tournament) => {
@@ -82,10 +94,6 @@ export default function TournamentList() {
         <div className="flex space-x-2">
           <Button onClick={() => setIsFilterMenuOpen(!isFilterMenuOpen)} icon={FiFilter} variant="secondary">
             Filter
-          </Button>
-
-          <Button onClick={() => console.log("Export")} icon={FiDownload} variant="secondary">
-            Export
           </Button>
         </div>
       </div>

@@ -7,14 +7,15 @@ import "react-quill/dist/quill.snow.css";
 
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
-import { TournamentRequest } from "../../../types/tournament";
-import { eventBus } from "../../../commun/utils/constant/eventBus";
-import { FormInput } from "../../../commun/components/input";
-import { useTournamentStore } from "../../../core/store/tournament-store";
-import { createTournamentSchema } from "../../../commun/validation/tournament";
-import { Button } from "../components/ui/Button";
+import { TournamentRequest } from "../../../../types/tournament";
+import { createTournamentSchema } from "../../../validation/tournament";
+import { useTournamentStore } from "../../../../core/store/tournament-store";
+import { eventBus } from "../../../utils/constant/eventBus";
+import { FormInput } from "../../input";
+import { Button } from "../Button";
 
-export const TournamentForm: React.FC = () => {
+
+export default function Form(){
   const { tournamentId } = useParams<{ tournamentId: string }>();
   const isEditMode = Boolean(tournamentId);
   const { isLoading, error, createTournament, updateTournament, getTournamentById } = useTournamentStore();
@@ -60,13 +61,13 @@ export const TournamentForm: React.FC = () => {
       const updated = await updateTournament(tournamentId!, data);
       if (updated) {
         eventBus.emit("tournamentUpdated", "Tournament updated successfully!");
-        navigate("/dashboard/tournaments");
+        navigate(-1);
       }
     } else {
       const created = await createTournament(data);
       if (created) {
         eventBus.emit("tournamentCreated", "Tournament created successfully!");
-        navigate("/dashboard/tournaments");
+        navigate(-1);
       }
     }
   };

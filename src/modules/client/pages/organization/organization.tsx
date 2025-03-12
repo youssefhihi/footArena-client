@@ -1,12 +1,12 @@
-import { Search, Plus } from "lucide-react"
+import { Plus } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Button } from "../../components/ui/button"
-import { Input } from "../../components/ui/input"
 import { OrganizationCard } from "../../../../commun/components/organization/organization-card"
 import { useOrganizationStore } from "../../store/organization-store"
 import { Link, useNavigate } from "react-router-dom"
 import { Organization } from "../../../../types/organozation"
 import { DeleteModel } from "../../../../commun/components/ui/model/delete"
+import { SearchBar } from "../../../../commun/components/tournament/SearchBar"
 
 export default function Organizations() {
   const [selectedOrganization, setSelectedOrganization] = useState<Organization>()
@@ -58,14 +58,8 @@ export default function Organizations() {
 
       {/* Search */}
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-        <Input
-          type="text"
-          placeholder="Search organizations..."
-          className="pl-10"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
+        
+         <SearchBar value={searchQuery} onChange={setSearchQuery} placeholder="Search organizations..." />    
       </div>
 
       {/* Organizations Grid */}
@@ -75,9 +69,9 @@ export default function Organizations() {
             <OrganizationCard onEdit={editOrganization} onDelete={handleDeleteOrganization } onView={OrganizationDetails} key={organization.organizationId} organization={organization} />          ))}
         </div>
       ) : (
-        <div className="flex h-40 flex-col items-center justify-center rounded-lg border border-dashed border-gray-300 bg-gray-50 p-6 text-center">
-          <p className="text-lg font-medium text-gray-500">No organizations found</p>
-          <p className="text-sm text-gray-400">Try adjusting your search criteria</p>
+        <div className="flex h-40 flex-col items-center justify-center rounded-lg border border-dashed border-gray-300 bg-gray-800 p-6 text-center">
+          <p className="text-lg font-medium text-gray-100">No organizations found</p>
+          <p className="text-sm text-gray-200">Try adjusting your search criteria</p>
         </div>
       )}
     </div>

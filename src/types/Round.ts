@@ -1,4 +1,4 @@
-import { Participant } from './participant';
+import {ParticipantTournament } from './participant';
 import { Carts } from "./Carts";
 
 export interface Round {
@@ -9,5 +9,5 @@ export interface Round {
     draws: number;
     goals: number;
     carts: Carts;
-    Participant: Participant
+    participant: ParticipantTournament
 }

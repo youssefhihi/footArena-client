@@ -1,3 +1,4 @@
+import { User } from "./auth";
 import { Participant } from "./participant";
 
 export interface Tournament {
@@ -11,6 +12,7 @@ export interface Tournament {
     createdAt : string;
     startTime : string;
     participants : Participant[];
+    user: User
 }
 
 export enum TournamentStatus {

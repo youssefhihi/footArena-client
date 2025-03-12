@@ -19,7 +19,6 @@ const Input = ({
     <div>
     <motion.input
           {...props}
-          type="text"
           required={false}
           className={cn(`block w-full rounded-lg border   py-2 pl-10  backdrop-blur-sm  focus:outline-none focus:ring-2  ${
             error

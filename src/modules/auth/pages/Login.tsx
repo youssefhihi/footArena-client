@@ -15,7 +15,7 @@ import { FormInput } from "../../../commun/components/input"
 
 type LoginFormData = z.infer<typeof loginSchema>
 
-export const Login = () => {
+export default function  Login() {
   const navigate = useNavigate()
   const { login, isLoading, error } = useAuthStore()
   const {

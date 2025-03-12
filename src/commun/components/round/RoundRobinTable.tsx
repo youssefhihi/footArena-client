@@ -1,10 +1,11 @@
+import { Avatar, AvatarFallback, AvatarImage } from "../../../modules/client/components/ui/avatar";
 import { Round } from "../../../types/Round";
 
 interface RoundRobinProps {
   rounds: Round[];
 
 }
-
+const url = import.meta.env.VITE_API_URL
 export const RoundRobinTable: React.FC<RoundRobinProps> = ({ rounds }) => {
     return (
         <div className="rounded-lg bg-gray-800">
@@ -38,15 +39,16 @@ export const RoundRobinTable: React.FC<RoundRobinProps> = ({ rounds }) => {
                     <tbody className="divide-y divide-gray-700">
                       {rounds.map((round) => (
                         <tr key={round.roundRobinId} className="hover:bg-gray-700">
-                          <td className="whitespace-nowrap px-6 py-4">
-                            <div className="flex items-center">
-                              <img
-                                src={round.Participant.organization.logo || "/placeholder.svg"}
-                                alt={round.Participant.organization.name}
-                                className="h-8 w-8 rounded-full"
+                          <td className="whitespace-nowrap px-6 py-4 flex">
+                            <Avatar className="flex items-center">
+                              <AvatarImage
+                                src={url + round.participant.organization.logo || "/placeholder.svg"}
+                                alt={round.participant.organization.name}
+                                className="h-36 w-36 rounded-full"
                               />
-                              <span className="ml-3 text-white">{round.Participant.organization.name}</span>
-                            </div>
+                            <AvatarFallback className="bg-gray-200">{round.participant.organization.name.charAt(0)}</AvatarFallback>
+                            </Avatar>
+                            <p className="ml-4 text-white">{round.participant.organization.name}</p>
                           </td>
                           <td className="whitespace-nowrap px-6 py-4 text-white">
                             {round.wins + round.draws + round.losses}
