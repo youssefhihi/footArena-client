@@ -19,10 +19,10 @@ import { updateMatchSchema } from "../../validation/match-validation";
 import { useMatchStore } from "../../../core/store/match-store";
 interface MatchCardProps {
   match: Match;
+  isOwner: boolean
 }
-const url = import.meta.env.VITE_API_URL;
 
-export const MatchCard: React.FC<MatchCardProps> = ({ match }) => {
+export const MatchCard: React.FC<MatchCardProps> = ({ match, isOwner }) => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [editedMatch, setEditedMatch] = useState<Match>(match)
   const { updateMatch } = useMatchStore();
@@ -70,6 +70,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match }) => {
         <Card className="overflow-hidden ">
           <CardContent className="p-0">
             <div className="relative">
+              { isOwner &&
               <Button
                 variant="ghost"
                 size="icon"
@@ -79,6 +80,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match }) => {
                 <Edit className="h-4 w-4" />
                 <span className="sr-only">Edit match</span>
               </Button>
+              }
 
               <div className="px-6 py-5">
                 <div className="flex items-center justify-between">
@@ -86,7 +88,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match }) => {
                     <span className="text-lg font-medium text-white">{editedMatch.participant1.organization.name}</span>
                     <Avatar className="h-12 w-12 border-2 border-primary">
                       <AvatarImage
-                        src={url + editedMatch.participant1.organization.logo || "/placeholder.svg?height=48&width=48"}
+                        imageUrl={editedMatch.participant1.organization.logo || "/placeholder.svg?height=48&width=48"}
                         alt={editedMatch.participant1.organization.name}
                       />
                       <AvatarFallback className="bg-primary/20 text-primary-foreground">
@@ -124,7 +126,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match }) => {
                   <div className="flex flex-1 items-center space-x-3">
                     <Avatar className="h-12 w-12 border-2 border-primary">
                       <AvatarImage
-                        src={url + editedMatch.participant2.organization.logo || "/placeholder.svg?height=48&width=48"}
+                        imageUrl={editedMatch.participant2.organization.logo || "/placeholder.svg?height=48&width=48"}
                         alt={editedMatch.participant2.organization.name}
                       />
                       <AvatarFallback className="bg-primary/20 text-primary-foreground">

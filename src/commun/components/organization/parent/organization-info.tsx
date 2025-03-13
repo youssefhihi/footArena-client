@@ -3,16 +3,15 @@ import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { ArrowLeft, SearchIcon, UserPlus} from "lucide-react"
 import { Organization, TeamMember, TeamMemberRequest, UpdateRoleTeamMemberRequest } from "../../../../types/organozation"
-import { User } from "../../../../types/auth"
-import { useOrganizationStore } from "../../store/organization-store"
-import { useUserStore } from "../../../../core/store/user-store"
-import { motion } from "framer-motion"
-import { OrganizationDetails } from "../../../../commun/components/organization/organization-details"
-import { TeamMemberCard } from "../../components/organization/team-member-card"
-import { useAuthStore } from "../../../auth/store/auth-store"
-import { Avatar, AvatarFallback, AvatarImage } from "../../components/ui/avatar"
-
-export default function OrganizationInfo() {
+import { User } from "../../../../types/auth";
+import { useUserStore } from "../../../../core/store/user-store";
+import { useAuthStore } from "../../../../modules/auth/store/auth-store";
+import { OrganizationDetails } from "../organization-details";
+import { Avatar, AvatarFallback, AvatarImage } from "../../../../modules/client/components/ui/avatar";
+import { TeamMemberCard } from "../../../../modules/client/components/organization/team-member-card";
+import { motion } from "framer-motion";
+import { useOrganizationStore } from "../../../../modules/client/store/organization-store";
+export default function Info() {
   const { organizationId } = useParams<{ organizationId: string }>()
   const navigate = useNavigate()
   const [isOwner, setIsOwner] = useState(false)

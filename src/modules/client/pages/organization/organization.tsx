@@ -48,7 +48,7 @@ export default function Organizations() {
     <>
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-800">Organizations & Teams</h1>
+        <h1 className="text-2xl font-bold text-gray-100">Organizations & Teams</h1>
         <Link to={"/c/organizations/create"}>
           <Button  className="cursor-pointer bg-blue-600 hover:bg-blue-700">
             <Plus className="mr-2 h-4 w-4" /> Create Organization

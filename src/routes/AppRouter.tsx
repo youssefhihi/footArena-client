@@ -1,6 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { lazy } from "react";
-
 const Auth = lazy(() => import("../commun/layouts/Auth"));
 const Admin = lazy(() => import("../commun/layouts/Admin"));
 const ClientLayout = lazy(() => import("../commun/layouts/Client"));
@@ -22,6 +21,8 @@ const TournamentuInfo = lazy(() => import("../modules/client/pages/tournament/to
 const TournamentFormP = lazy(() => import("../modules/client/pages/tournament/tournament-form"));
 const OrganizationForm = lazy(() => import("../modules/client/pages/organization/organization-form"));
 const OrganizationInfo = lazy(() => import("../modules/client/pages/organization/organization-info"));
+const OrganizationInfoA = lazy(() => import("../modules/admin/pages/organization/organization-info"));
+const OrganizationList = lazy(() => import("../modules/admin/pages/organization/organization-list"));
 const AvailableTournaments = lazy(() => import("../modules/client/pages/tournament/available-tournament"));
 
 
@@ -52,8 +53,10 @@ const AppRouter = () => {
             <Route path="statistics" element={<Statistics/>}/>
           </Route>
           {/* Dashboard Routes */}
-          <Route path="/dashboard" element={<Admin />}>
-            <Route path="" element={<DashboardHome />} />
+          <Route path="/a" element={<Admin />}>
+            <Route path="dashboard" element={<DashboardHome />} />
+            <Route path="organizations" element={<OrganizationList />} />
+            <Route path="organizations/:organizationId" element={<OrganizationInfoA />} />
             <Route path="tournaments" element={<TournamentManagement />} >
               <Route path="" element={<TournamentList />} />
               <Route path="create" element={<TournamentForm />} />

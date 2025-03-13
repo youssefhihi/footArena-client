@@ -5,7 +5,6 @@ interface RoundRobinProps {
   rounds: Round[];
 
 }
-const url = import.meta.env.VITE_API_URL
 export const RoundRobinTable: React.FC<RoundRobinProps> = ({ rounds }) => {
     return (
         <div className="rounded-lg bg-gray-800">
@@ -46,7 +45,7 @@ export const RoundRobinTable: React.FC<RoundRobinProps> = ({ rounds }) => {
                           <td className="whitespace-nowrap px-6 py-4 flex">
                             <Avatar className="flex items-center">
                               <AvatarImage
-                                src={url + round.participant.organization.logo || "/placeholder.svg"}
+                                imageUrl={round.participant.organization.logo || " "}
                                 alt={round.participant.organization.name}
                                 className="h-36 w-36 rounded-full"
                               />

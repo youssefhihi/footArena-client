@@ -13,11 +13,9 @@ interface OrganizationCardProps {
     onEdit?: (organization: Organization) => void
     onDelete?: (organization: Organization) => void
 }
-const url =import.meta.env.VITE_API_URL
 export function OrganizationCard({ organization, onView, onEdit, onDelete,onRefuse }: OrganizationCardProps) {
   // Get active members count
   const activeMembers = organization.teamMembers.filter((member) => member.isActive).length
-  const image = url+organization.logo ? url+organization.logo : "";
   return (
     <>
    
@@ -25,7 +23,7 @@ export function OrganizationCard({ organization, onView, onEdit, onDelete,onRefu
       <CardHeader className="pb-2">
         <div className="flex items-center space-x-3">
           <Avatar className="h-12 w-12">
-            <AvatarImage src={image} alt={organization.name} />
+            <AvatarImage imageUrl={organization.logo || " "} alt={organization.name} />
             <AvatarFallback className="bg-gray-200">{organization.name.charAt(0)}</AvatarFallback>
           </Avatar>
           <div>

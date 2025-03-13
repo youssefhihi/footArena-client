@@ -5,6 +5,9 @@ import {  Organization, OrganizationRequest } from "../../../types/organozation"
 const prefix = "organization";
 
 export const OrganizationService = {
+    getAllOrganizations: async (): Promise<ApiResponse<Organization[]>> => {
+        return fetchApi<Organization[]>(`${prefix}`, { method: "GET" });
+    },
     getOwnOrganization: async (): Promise<ApiResponse<Organization[]>> => {
         return fetchApi<Organization[]>(`${prefix}/me`, { method: "GET" });
     },
