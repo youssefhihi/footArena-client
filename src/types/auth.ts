@@ -5,7 +5,7 @@ export interface FullName {
   
   export enum Role {
     ADMIN = "ADMIN",
-    USER = "USER",
+    PLAYER = "PLAYER",
   }
   
   export interface User {

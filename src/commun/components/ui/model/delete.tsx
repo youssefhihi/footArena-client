@@ -24,18 +24,18 @@ export const DeleteModel: React.FC<DeleteModelProps> = ({
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="w-full max-w-md rounded-lg bg-gray-100 p-6 shadow-xl"
+        className="w-full max-w-md rounded-lg bg-gray-800 p-6 shadow-xl"
       >
         <div className="text-center">
           <FiTrash2 className="mx-auto mb-4 h-12 w-12 text-red-400" />
           <h3 className="mb-5 text-lg font-medium">Delete {name}</h3>
-          <p className="mb-5 text-gray-800">
+          <p className="mb-5 text-gray-200">
             Are you sure you want to delete{" "}
             <span className="font-medium text-red-600">{name}</span>? This
             action cannot be undone.
           </p>
-          <p className="mb-5 text-gray-800">
-            Please type <span className="font-medium">{name}</span> to confirm.
+          <p className="mb-5 text-white">
+            Please type <span className="font-medium text-gray-400">{name}</span> to confirm.
           </p>
           <input
             type="text"
@@ -43,7 +43,7 @@ export const DeleteModel: React.FC<DeleteModelProps> = ({
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
           />
-          <div className="mt-4 flex justify-center space-x-4">
+          <div className="mt-4 flex justify-between space-x-4">
             <Button onClick={cancelDelete} variant="ghost">
               Cancel
             </Button>

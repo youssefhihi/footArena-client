@@ -13,6 +13,9 @@ export const RoundRobinTable: React.FC<RoundRobinProps> = ({ rounds }) => {
                   <table className="min-w-full divide-y divide-gray-700">
                     <thead>
                       <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-400">
+                          Rank
+                        </th>
                         <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-400">
                           Team
                         </th>
@@ -37,8 +40,9 @@ export const RoundRobinTable: React.FC<RoundRobinProps> = ({ rounds }) => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-700">
-                      {rounds.map((round) => (
+                      {rounds.map((round,index) => (
                         <tr key={round.roundRobinId} className="hover:bg-gray-700">
+                          <td className="whitespace-nowrap px-6 py-4 text-white">{index + 1}</td>
                           <td className="whitespace-nowrap px-6 py-4 flex">
                             <Avatar className="flex items-center">
                               <AvatarImage

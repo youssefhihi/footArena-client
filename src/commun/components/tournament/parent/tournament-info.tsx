@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { FiActivity, FiInfo, FiList, FiUsers } from "react-icons/fi"
-import { useParams } from "react-router-dom"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 import { useTournamentStore } from "../../../../core/store/tournament-store"
 import { Tournament } from "../../../../types/tournament"
 import { useMatchStore } from "../../../../core/store/match-store"
@@ -16,7 +16,9 @@ import { useOrganizationStore } from "../../../../modules/client/store/organizat
 import { TournamentHeader } from "../tournament-bar"
 import { FormButton } from "../../ui/button/Button"
 import MatchForm from "../../match/generate-matches"
-import { useUserStore } from "../../../../core/store/user-store"
+import { useAuthStore } from "../../../../modules/auth/store/auth-store"
+import { DeleteModel } from "../../ui/model/delete"
+import { Participant } from "../../../../types/participant"
 
 
 
@@ -36,14 +38,18 @@ export default function Info() {
   const [ isOwner , setIsOwner] = useState<boolean>(false);
   const [ selectedOrganization, setSelectedOrganization ] = useState<Organization>();
   const [ showModal, setShowModal ] = useState<boolean>(false);
+  const [ showDeleteParticipant, setShowDeleteParticipant] = useState<boolean>(false)
+  const [ selectedDeleteParticpant, setSelectedDeleteParticpant] = useState<Participant>()
   const [searchQuery, setSearchQuery] = useState("")
   const [showMatchForm, setShowMatchForm] = useState<boolean>(false);
   const { tournamentId } = useParams<{ tournamentId: string }>();
-  const {  getTournamentById, participateToTournament } = useTournamentStore();
+  const {  getTournamentById, participateToTournament, deleteParticipantFromTournament } = useTournamentStore();
   const {isLoading, matches, fetchTournamentMatches } = useMatchStore();
   const { rounds , fetchTournamentRounds } = useRoundStore();
   const { organizations , fetchOwnOrganization } = useOrganizationStore();
-  const { authUser } = useUserStore();
+  const { authUser } = useAuthStore();
+  const navigate = useNavigate();
+  const path = useLocation().pathname;
 
   
   const filtredMatches = matches.filter((match) => { 
@@ -68,7 +74,11 @@ export default function Info() {
     }, [tournamentId, getTournamentById, fetchTournamentMatches, activeTab]);
 
   const handleViewOrganization = (organization: Organization) => {
-    console.log("Viewing organization:", organization);
+    if(path.startsWith("a/")){
+      navigate(`/a/organizations/${organization.organizationId}`);
+    } else{
+      navigate(`/c/organizations/${organization.organizationId}`);
+    }
   }
 
   const joinTournament = async () => {
@@ -92,6 +102,21 @@ export default function Info() {
       org.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       org.description.toLowerCase().includes(searchQuery.toLowerCase()),
   )
+
+  const deleteParticipantModel = (participant: Participant) => {
+    setShowDeleteParticipant(true)
+    setSelectedDeleteParticpant(participant)
+  }
+  const cancelDeleteParticipant = () =>{
+    setShowDeleteParticipant(false)
+    setSelectedDeleteParticpant(undefined)
+  }
+  const confirmDeleteParticipant = async() => {
+    if(!selectedDeleteParticpant) return
+    await deleteParticipantFromTournament(selectedDeleteParticpant.participantId)
+    setShowDeleteParticipant(false)
+    setSelectedDeleteParticpant(undefined)
+  }
   return (
     <div className="min-h-screen ">
       {/* Tournament Header */}
@@ -184,9 +209,33 @@ export default function Info() {
 
             {tournament &&  activeTab === "participants" && (
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                  {tournament.participants.map((participant) => (
-                      <OrganizationCard onView={handleViewOrganization} key={participant.participantId} organization={participant.organization} />
-                  ))}
+              {isOwner ? (
+                  tournament.participants.map((participant, index) => (
+                    <OrganizationCard
+                      onView={handleViewOrganization}
+                      key={index}
+                      organization={participant.organization}
+                      onRefuse={() => deleteParticipantModel(participant)}
+                    />
+                  ))
+                ) : (
+                  tournament.participants.map((participant, index) => (
+                    <OrganizationCard
+                      onView={handleViewOrganization}
+                      key={index}
+                      organization={participant.organization}
+                    />
+                  ))
+              )}
+
+                  {isOwner && showDeleteParticipant && selectedDeleteParticpant &&
+                  <DeleteModel  
+                  textButton="Delete Participant" 
+                  name={selectedDeleteParticpant.organization.name}
+                  cancelDelete={cancelDeleteParticipant}
+                  confirmDelete={confirmDeleteParticipant}
+                  />
+                  }
               </div>
             )}
 

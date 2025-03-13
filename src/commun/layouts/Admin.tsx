@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, Link, useLocation, useNavigate, Navigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { ToastContainer } from "react-toastify";
 import {
@@ -14,8 +14,10 @@ import {
 } from "react-icons/fi";
 import fifaLogo from  "../../assets/imgs/logo.png";
 import { BsFillTrophyFill } from "react-icons/bs";
-import { useUserStore } from "../../core/store/user-store";
 import { SidebarItem } from "../components/ui/sideBar/sidebar-item";
+import { Role } from "../../types/auth";
+import { useAuthStore } from "../../modules/auth/store/auth-store";
+import LoadingPage from "../components/ui/loading/loading-page";
 
 
 export default function Admin() {
@@ -23,12 +25,17 @@ export default function Admin() {
   const [isMobile, setIsMobile] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isTournamentSubmenuOpen, setIsTournamentSubmenuOpen] = useState(false);
+  const [ loading , setLoading] = useState<boolean>(true);
   const location = useLocation();
   const navigate = useNavigate();
-  const { getAuthUser } = useUserStore();
+  const { authUser, getAuthUser } = useAuthStore();
 
   useEffect(() => {
-    getAuthUser();
+    const Loaduser = async () => {
+      await getAuthUser();
+      setLoading(false);
+    }
+    Loaduser();
   })
   // Check if current route is active
   const isActive = (path: string) => {
@@ -58,6 +65,10 @@ export default function Admin() {
   }, []);
 
   return (
+    <>
+     {loading ? ( <LoadingPage />):
+           (authUser  && authUser.role === Role.PLAYER ? (
+     
     <div className="flex h-screen bg-gray-900 text-white">
       {/* Sidebar Overlay */}
       {isMobile && isSidebarOpen && (
@@ -285,5 +296,10 @@ export default function Admin() {
         pauseOnHover
       />
     </div>
+    ):(
+      <Navigate to="auth/sign-in" replace  />
+    )
+  )}
+    </>
   );
 }

@@ -19,6 +19,7 @@ interface TournamentState {
   getTournamentById: (id: string) => Promise<Tournament | undefined | null>;
   getAvailableTournaments: () => Promise<void>;
   participateToTournament: (data: ParticipantRequest) => Promise<Participant | undefined>;
+  deleteParticipantFromTournament: (particpantId: string) => Promise<void>;
 }
 
 export const useTournamentStore = create<TournamentState>((set,get) => ({
@@ -174,4 +175,30 @@ export const useTournamentStore = create<TournamentState>((set,get) => ({
       toast.success(response.message);
       return response.data;
   },
+  deleteParticipantFromTournament: async (particpantId) => {
+    set({ isLoading: true });
+      const response = await ParticipantService.deleteParticipant(particpantId);
+      if (!response.success) {
+        set({ error: response.errors, isLoading: false });
+        if (Array.isArray(response.errors)) {
+          response.errors.forEach((err) => toast.error(err));
+        } else {
+          toast.error(response.errors?.message || 'Failed to Join this tournament');
+        }
+        return;
+      }
+      set((state) => ({
+        availableTournaments: state.availableTournaments.map((tournament) => ({
+          ...tournament,
+          participants: tournament.participants.filter((p) => p.participantId !== particpantId),
+        })),
+        tournaments: state.tournaments.map((tournament) => ({
+          ...tournament,
+          participants: tournament.participants.filter((p) => p.participantId !== particpantId),
+        })),
+        isLoading: false,
+      }));
+     
+      toast.success(response.message);
+  }
 }));

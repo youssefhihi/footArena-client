@@ -9,16 +9,19 @@ import { Button } from "../tournament/Button"
 interface OrganizationCardProps {
   organization: Organization,
     onView: (organization: Organization) => void
+    onRefuse?: () => void
     onEdit?: (organization: Organization) => void
     onDelete?: (organization: Organization) => void
 }
 const url =import.meta.env.VITE_API_URL
-export function OrganizationCard({ organization, onView, onEdit, onDelete }: OrganizationCardProps) {
+export function OrganizationCard({ organization, onView, onEdit, onDelete,onRefuse }: OrganizationCardProps) {
   // Get active members count
   const activeMembers = organization.teamMembers.filter((member) => member.isActive).length
   const image = url+organization.logo ? url+organization.logo : "";
   return (
-    <Card className="overflow-hidden transition-all hover:shadow-md">
+    <>
+   
+    <Card className="overflow-hidden transition-all hover:shadow-md bg-gray-800">
       <CardHeader className="pb-2">
         <div className="flex items-center space-x-3">
           <Avatar className="h-12 w-12">
@@ -48,15 +51,21 @@ export function OrganizationCard({ organization, onView, onEdit, onDelete }: Org
             <Button onClick={() => onView(organization)} icon={FiEye} variant="default" className="text center">
             </Button>
             {onDelete && onEdit && 
-            <>
-              <Button onClick={() => onEdit(organization)} icon={FiEdit2} variant="primary" className="text center">
+              <>
+                <Button onClick={() => onEdit(organization)} icon={FiEdit2} variant="primary" className="text center">
+                </Button>
+                <Button onClick={() => onDelete(organization)} icon={FiTrash2} variant="danger" className="text center">
+                </Button>
+              </>
+            }
+            {
+              onRefuse &&
+              <Button onClick={() => onRefuse()} icon={FiTrash2} variant="danger" className="text center">
               </Button>
-              <Button onClick={() => onDelete(organization)} icon={FiTrash2} variant="danger" className="text center">
-              </Button>
-            </>
             }
         </div>
       </CardFooter>
     </Card>
+    </>
   )
 }

@@ -9,11 +9,12 @@ import { useUserStore } from "../../../../core/store/user-store"
 import { motion } from "framer-motion"
 import { OrganizationDetails } from "../../../../commun/components/organization/organization-details"
 import { TeamMemberCard } from "../../components/organization/team-member-card"
+import { useAuthStore } from "../../../auth/store/auth-store"
 
 export default function OrganizationInfo() {
   const { organizationId } = useParams<{ organizationId: string }>()
   const navigate = useNavigate()
-
+  const [isOwner, setIsOwner] = useState(false)
   const [organization, setOrganization] = useState<Organization | null>(null)
   const [activeTab, setActiveTab] = useState<"details" | "members" | "statistics">("details")
   const [editingMemberId, setEditingMemberId] = useState<string | null>(null)
@@ -26,11 +27,13 @@ export default function OrganizationInfo() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState<string | null>(null)
   const { updateMemberRole, getOrganizationById ,addTeamMemberToOrganization, removeTeamMemberFromOrganization } = useOrganizationStore();
   const { isLoading, searchUserByUsername} = useUserStore();
+  const { authUser } = useAuthStore();
 
   useEffect(() => {
     const fetchOrg = async () => {
       const org = await getOrganizationById(organizationId!)
       if (org !== null && org !== undefined) {
+        setIsOwner(org.teamMembers.find((m) => m.role === "President")?.user.id === authUser?.id)
         setOrganization(org)
       }
     }
@@ -177,7 +180,7 @@ export default function OrganizationInfo() {
 
       {/* Organization Details */}
       {activeTab === "details" && (
-       <OrganizationDetails organization={organization} />
+       <OrganizationDetails organization={organization} isOwner={isOwner} />
       )}
 
       {/* Team Members */}
@@ -185,13 +188,15 @@ export default function OrganizationInfo() {
         <div>
           <div className="mb-4 flex justify-between">
             <h2 className="text-lg font-semibold">Team Members</h2>
-            <button
-              className="rounded-md bg-[#0FFF50] px-4 py-2 font-medium text-black hover:bg-opacity-90"
-              onClick={() => setShowAddMember(true)}
-            >
-              <UserPlus className="mr-2 inline-block h-4 w-4" />
-              Add Member
-            </button>
+            { isOwner &&
+              <button
+                className="rounded-md bg-[#0FFF50] px-4 py-2 font-medium text-black hover:bg-opacity-90"
+                onClick={() => setShowAddMember(true)}
+              >
+                <UserPlus className="mr-2 inline-block h-4 w-4" />
+                Add Member
+              </button>
+            }
           </div>
 
           {/* Members Grid */}
@@ -206,7 +211,8 @@ export default function OrganizationInfo() {
                 editedRole={editedRole} 
                 onSetEditRole={setEditedRole} 
                 cancelEditRole={cancelEditRole} 
-                saveEditedRole={saveEditedRole} />
+                saveEditedRole={saveEditedRole}
+                isOwner={isOwner} />
             ))}
           </div>
 

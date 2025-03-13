@@ -14,5 +14,4 @@ export interface ParticipantTournament{
     participantId: string,
     organization: Organization,
     tournament: Tournament
-    
 }
