@@ -34,7 +34,7 @@ export const MatchForm: React.FC<MatchFormProps> = ({ tournamentId,onCancel }) =
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="w-full max-w-xl rounded-lg bg-gray-100 p-6 shadow-xl"
+      className="w-full max-w-xl rounded-lg bg-gray-800 p-6 shadow-xl"
     >
       <h2 className="text-xl font-bold mb-4">Match Configuration</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

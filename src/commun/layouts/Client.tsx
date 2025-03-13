@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, Link, useLocation, useNavigate, Navigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { ToastContainer } from "react-toastify";
 import {
@@ -13,6 +13,9 @@ import fifaLogo from  "../../assets/imgs/logo.png";
 import { SidebarItem } from "../components/ui/sideBar/sidebar-item";
 import { SubmenuItem } from "../components/ui/sideBar/submenu";
 import { Calendar, Home, Trophy, User, Users } from "lucide-react";
+import { Role } from "../../types/auth";
+import { useAuthStore } from "../../modules/auth/store/auth-store";
+import LoadingPage from "../components/ui/loading/loading-page";
 
 
 
@@ -21,6 +24,8 @@ export default function ClientLayout() {
   const [isMobile, setIsMobile] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isTournamentSubmenuOpen, setIsTournamentSubmenuOpen] = useState(false);
+  const [ loading , setLoading] = useState<boolean>(true);
+  const { authUser, getAuthUser} = useAuthStore();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -32,6 +37,11 @@ export default function ClientLayout() {
 
   // Handle responsive sidebar
   useEffect(() => {
+    const Loaduser = async () => {
+      await getAuthUser();
+      setLoading(false);
+    }
+      Loaduser();
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1024);
       if (window.innerWidth < 1024) {
@@ -46,7 +56,13 @@ export default function ClientLayout() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+
+  
   return (
+    <>
+    {loading ? ( <LoadingPage />):
+      (authUser  && authUser.role === Role.PLAYER ? (
+
     <div className="flex h-screen bg-gray-900 text-white scrollbar-hide">
       {/* Sidebar Overlay */}
       {isMobile && isSidebarOpen && (
@@ -246,5 +262,10 @@ export default function ClientLayout() {
         pauseOnHover
       />
     </div>
+    ):(
+      <Navigate to="/auth/sign-in" replace />
+    )
+   )}
+    </>
   );
 }

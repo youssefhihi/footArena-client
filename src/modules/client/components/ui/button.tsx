@@ -12,7 +12,7 @@ export const buttonVariants = cva(
         destructive: "bg-red-600 text-white hover:bg-red-700",
         outline: "border border-gray-300 text-gray-700 hover:bg-gray-100",
         secondary: "bg-gray-100 text-gray-800 hover:bg-gray-200",
-        ghost: "bg-transparent text-gray-700 hover:bg-gray-100 border border-gray-300",
+        ghost: "bg-transparent text-gray-300 hover:text-gray-500 hover:bg-gray-100 border border-gray-300",
         link: "text-blue-600 underline hover:text-blue-800",
         danger: "bg-red-600 text-white hover:bg-red-700",
       },

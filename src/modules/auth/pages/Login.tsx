@@ -42,7 +42,7 @@ export default function  Login() {
   const onSubmit = async (data: LoginFormData) => {
     const role = await login(data.usernameOrEmail, data.password)
     if (role != null)
-      navigate(role === Role.ADMIN ? "/dashboard" : "/home", { state: { loginSuccess: "Login successful!" } })
+      navigate(role === Role.ADMIN ? "/a/dashboard" : "/c/dashboard", { state: { loginSuccess: "Login successful!" } })
   }
 
   const formVariants = {

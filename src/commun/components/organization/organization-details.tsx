@@ -5,49 +5,51 @@ import { Link } from "react-router-dom";
 
 interface OrganizationDetailsProps {
   organization: Organization,
+  isOwner: boolean
 
 }
 const url = import.meta.env.VITE_API_URL
-export function OrganizationDetails({ organization }: OrganizationDetailsProps) {
-    const image = url+organization.logo ? url+organization.logo : "";
+export function OrganizationDetails({ organization, isOwner }: OrganizationDetailsProps) {
+    const image = organization.logo ? url+organization.logo : "";
     return (
-        <div className="rounded-lg border bg-white p-6 shadow-sm">
-        <div className="flex flex-col items-center space-y-4 md:flex-row md:items-start md:space-x-6 md:space-y-0">
+        <div className="rounded-2xl border border-gray-700 bg-gray-800 p-6 shadow-lg transition-all duration-300 hover:shadow-xl">
+        <div className="flex flex-col items-center md:flex-row md:items-start md:space-x-6">
             <Avatar className="h-32 w-32 overflow-hidden rounded-full bg-gray-200">
             <AvatarImage src={image} alt={organization.name} />
             <AvatarFallback className="bg-gray-200">{organization.name.charAt(0)}</AvatarFallback>
           </Avatar>
-          <div className="flex-1 space-y-4 text-center md:text-left">
-            <div>
-              <h2 className="text-xl font-bold">{organization.name}</h2>
-              <span className="inline-block rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800">
-                {organization.isTeam ? "Team" : "Induvidual"}
-              </span>
+           {/* Organization Details */}
+        <div className="mt-4 flex-1 space-y-4 text-center md:mt-0 md:text-left">
+          <div>
+            <h2 className="text-2xl font-bold text-white">{organization.name}</h2>
+            <span className="mt-2 inline-block rounded-full bg-blue-500/20 px-3 py-1 text-sm font-medium text-blue-400">
+              {organization.isTeam ? "Team" : "Individual"}
+            </span>
+          </div>
+
+          <div className="flex-1 justify-center gap-4 max-w-xl mx-auto">
+            <div className="rounded-lg bg-gray-700 p-4 text-center">
+              <p className="text-sm font-medium text-gray-300">Total Members</p>
+              <p className="text-xl font-semibold text-white">{organization.teamMembers.length}</p>
             </div>
+          </div>
 
-            <p className="text-gray-600">{organization.description}</p>
+          {/* Statistics */}
+          <p className="text-white text-xl font-medium ">Description:</p>
+          <p className="text-gray-300 text-ms pl-3">{organization.description}</p>
 
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div className="rounded-md bg-gray-50 p-3">
-                <p className="text-sm font-medium text-gray-500">Active Members</p>
-                <p className="text-lg font-semibold">{organization.teamMembers.filter((m) => m.isActive).length}</p>
-              </div>
-
-              <div className="rounded-md bg-gray-50 p-3">
-                <p className="text-sm font-medium text-gray-500">Total Members</p>
-                <p className="text-lg font-semibold">{organization.teamMembers.length}</p>
-              </div>
-            </div>
-
+          { isOwner &&
             <Link
-                to={`/c/organizations/edit/${organization.organizationId}`}
-                className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+              to={`/c/organizations/edit/${organization.organizationId}`}
+              className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-5 py-2 text-white transition-all duration-300 hover:bg-blue-700"
             >
-              <Edit className="mr-2 inline-block h-4 w-4" />
+              <Edit className="mr-2 h-5 w-5" />
               Edit Organization
             </Link>
-          </div>
+          }
+
         </div>
       </div>
+    </div>
     )
 }

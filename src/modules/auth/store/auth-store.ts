@@ -3,9 +3,10 @@ import { RegisterRequest, ResetPasswordRequest, Role, UpdatePasswordRequest, Use
 import UseAuthService from '../service/auth-service';
 import AuthService from '../service/auth-service';
 import { toast } from 'react-toastify';
+import { UserService } from '../../../core/service/user-service';
 
 interface AuthState {
-  user: User | null;
+  authUser: User | undefined;
   token: string | null;
   isLoading: boolean;
   error:  Record<string, string> | null;
@@ -14,11 +15,12 @@ interface AuthState {
   resetPassword: (data: ResetPasswordRequest) => Promise<void>;
   updatePassword: (data: UpdatePasswordRequest) => Promise<boolean>;
   logout: () => void;
+  getAuthUser: () => Promise<User | undefined>;
 }
 
 
-export const useAuthStore = create<AuthState>((set) => ({
-  user: null,
+export const useAuthStore = create<AuthState>((set,get) => ({
+  authUser: undefined,
   token: null,
   isLoading: false,
   error: null,
@@ -35,7 +37,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       }
 
       set({
-        user: response?.data?.user,
+        authUser: response?.data?.user,
         token: response?.data?.token,
         isLoading: false,
       });
@@ -110,8 +112,24 @@ export const useAuthStore = create<AuthState>((set) => ({
           return response.success;
       },
       logout: () => {
-        set({ user: null, token: null });
+        set({ authUser: undefined, token: null });
         localStorage.removeItem('authToken');
+      },
+
+      getAuthUser: async () => {
+        set({ isLoading: true, error: null });
+        if (get().authUser) {
+          set({ isLoading: false });
+          return get().authUser;
+        }
+        const response = await UserService.getAuthUser();
+        if (!response.success) {
+          set({ error: response.errors, isLoading: false });
+          return;
+        }
+        set({ authUser: response.data, isLoading: false });
+        return response.data;
       }
+
 
 }));
