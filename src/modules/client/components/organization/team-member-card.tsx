@@ -17,7 +17,6 @@ interface TeamMemberCardProps {
     isOwner: boolean
 
 }
-const url = import.meta.env.VITE_API_URL
 
 export function TeamMemberCard({ member,
     showDeleteConfirm,
@@ -31,7 +30,6 @@ export function TeamMemberCard({ member,
     saveEditedRole,
     isOwner
 }: TeamMemberCardProps) {
-  const image = member.user.profileImage ? url + member.user.profileImage : "";
     return (
         <div
                 key={member.teamMemberId}
@@ -61,7 +59,7 @@ export function TeamMemberCard({ member,
                 <div className="flex items-start justify-between">
                   <div className="flex items-center space-x-3">
                        <Avatar className="h-16 w-16 overflow-hidden rounded-full bg-gray-200">
-                        <AvatarImage src={image} alt={member.user.username} />
+                        <AvatarImage imageUrl={member.user.profileImage || ""} alt={member.user.username} />
                         <AvatarFallback className="border border-white bg-gray-200 text-gray-800">{member.user.fullName.firstName.charAt(0)}</AvatarFallback>
                       </Avatar>
                     <div>

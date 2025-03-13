@@ -19,6 +19,7 @@ import MatchForm from "../../match/generate-matches"
 import { useAuthStore } from "../../../../modules/auth/store/auth-store"
 import { DeleteModel } from "../../ui/model/delete"
 import { Participant } from "../../../../types/participant"
+import { Avatar, AvatarFallback, AvatarImage } from "../../../../modules/client/components/ui/avatar"
 
 
 
@@ -31,7 +32,6 @@ const tabs = [
   { id:"join", label: "Join Tournament", icon:  MdOutlineGroupAdd},
 ]
 
-const url = import.meta.env.VITE_API_URL;
 export default function Info() {
   const [activeTab, setActiveTab] = useState("overview")
   const [tournament, setTournament] = useState<Tournament | undefined | null>();
@@ -74,7 +74,7 @@ export default function Info() {
     }, [tournamentId, getTournamentById, fetchTournamentMatches, activeTab]);
 
   const handleViewOrganization = (organization: Organization) => {
-    if(path.startsWith("a/")){
+    if(path.startsWith("/a/")){
       navigate(`/a/organizations/${organization.organizationId}`);
     } else{
       navigate(`/c/organizations/${organization.organizationId}`);
@@ -168,13 +168,10 @@ export default function Info() {
                   <h3 className="text-lg font-medium text-white">The Creator Of tournament</h3>
                   <div className="mt-4 space-y-4">
                       <div className="mb-4 flex items-center space-x-3 rounded-md  p-3">
-                      <div className="h-10 w-10 overflow-hidden rounded-full bg-gray-200">
-                        <img
-                          src={url + tournament.user.profileImage || "/placeholder.svg?height=40&width=40"}
-                          alt={tournament.user.username}
-                          className="h-full w-full object-cover"
-                        />
-                      </div>
+                      <Avatar className="h-12 w-12">
+                        <AvatarImage imageUrl={tournament.user.profileImage || " "} alt={tournament.user.username} />
+                        <AvatarFallback className="bg-gray-200 text-gray-800">{tournament.user.fullName.firstName.charAt(0)}</AvatarFallback>
+                      </Avatar>
                       <div>
                         <div className="font-medium">{tournament.user.fullName.firstName + " " + tournament.user.fullName.lastName}</div>
                         <div className="text-xs text-gray-500">{tournament.user.email}</div>
@@ -243,7 +240,7 @@ export default function Info() {
               <div className="space-y-6">
                 {filtredMatches.length > 0 ? (
                   filtredMatches.map((match,index) => (
-                    <MatchCard key={index} match={match} />
+                    <MatchCard key={index} match={match} isOwner={isOwner} />
                   ))
                 ) : (
                   <motion.div

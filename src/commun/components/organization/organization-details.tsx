@@ -8,14 +8,12 @@ interface OrganizationDetailsProps {
   isOwner: boolean
 
 }
-const url = import.meta.env.VITE_API_URL
 export function OrganizationDetails({ organization, isOwner }: OrganizationDetailsProps) {
-    const image = organization.logo ? url+organization.logo : "";
     return (
         <div className="rounded-2xl border border-gray-700 bg-gray-800 p-6 shadow-lg transition-all duration-300 hover:shadow-xl">
         <div className="flex flex-col items-center md:flex-row md:items-start md:space-x-6">
             <Avatar className="h-32 w-32 overflow-hidden rounded-full bg-gray-200">
-            <AvatarImage src={image} alt={organization.name} />
+            <AvatarImage imageUrl={organization.logo || " "} alt={organization.name} />
             <AvatarFallback className="bg-gray-200">{organization.name.charAt(0)}</AvatarFallback>
           </Avatar>
            {/* Organization Details */}

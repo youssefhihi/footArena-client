@@ -6,6 +6,7 @@ import { TeamMemberService } from "../service/team-member-service";
 
 interface OrganizationState {
     organizations: Organization[];
+    allOrganizations: Organization[];
     isLoading: boolean;
     error: Record<string, string> | null;
     fetchOwnOrganization: () => Promise<void>;
@@ -16,10 +17,12 @@ interface OrganizationState {
     addTeamMemberToOrganization: (teamMember: TeamMemberRequest) => Promise<TeamMember | undefined>
     removeTeamMemberFromOrganization: (id: string) => Promise<boolean>
     updateMemberRole: (data: UpdateRoleTeamMemberRequest) => Promise<TeamMember | undefined>
+    getAllOrganizations: () => Promise<void>
 }
 
 export const useOrganizationStore = create<OrganizationState>((set, get) => ({
     organizations: [],
+    allOrganizations: [],
     isLoading: false,
     error: null,
     getOrganizationById: async (id) => {
@@ -176,5 +179,23 @@ export const useOrganizationStore = create<OrganizationState>((set, get) => ({
             isLoading: false 
         });
         return response.data;
+    },
+    getAllOrganizations: async () => {
+        set({ isLoading: true });
+        if(get().allOrganizations.length > 0) {
+            set({ isLoading: false });
+            return;
+        }
+        const response = await OrganizationService.getAllOrganizations();
+        if (!response.success) {
+            set({ error: response.errors, isLoading: false });
+            if (Array.isArray(response.errors)) {
+                response.errors.forEach((err) => toast.error(err.message));
+              } else {
+                toast.error(response.errors?.message || 'Failed to get all organizations');
+              }            
+            return;
+        }
+        set({ allOrganizations: response.data, isLoading: false });
     },
 }));

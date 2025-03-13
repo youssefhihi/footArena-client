@@ -18,6 +18,7 @@ import { SidebarItem } from "../components/ui/sideBar/sidebar-item";
 import { Role } from "../../types/auth";
 import { useAuthStore } from "../../modules/auth/store/auth-store";
 import LoadingPage from "../components/ui/loading/loading-page";
+import { Club } from "lucide-react";
 
 
 export default function Admin() {
@@ -30,13 +31,7 @@ export default function Admin() {
   const navigate = useNavigate();
   const { authUser, getAuthUser } = useAuthStore();
 
-  useEffect(() => {
-    const Loaduser = async () => {
-      await getAuthUser();
-      setLoading(false);
-    }
-    Loaduser();
-  })
+
   // Check if current route is active
   const isActive = (path: string) => {
     return location.pathname === path || location.pathname.startsWith(`${path}/`);
@@ -50,6 +45,11 @@ export default function Admin() {
 
   // Handle responsive sidebar
   useEffect(() => {
+    const Loaduser = async () => {
+      await getAuthUser();
+      setLoading(false);
+    }
+    Loaduser();
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1024);
       if (window.innerWidth < 1024) {
@@ -67,7 +67,7 @@ export default function Admin() {
   return (
     <>
      {loading ? ( <LoadingPage />):
-           (authUser  && authUser.role === Role.PLAYER ? (
+           (authUser  && authUser.role === Role.ADMIN ? (
      
     <div className="flex h-screen bg-gray-900 text-white">
       {/* Sidebar Overlay */}
@@ -107,20 +107,26 @@ export default function Admin() {
             <SidebarItem
               icon={<FiHome />}
               text="Dashboard"
-              to="/dashboard"
-              isActive={isActive("/dashboard")}
+              to="/a/dashboard"
+              isActive={isActive("/a/dashboard")}
             />
             <SidebarItem
               icon={<FiUsers />}
               text="Users"
-              to="/dashboard/users"
-              isActive={isActive("/dashboard/users")}
+              to="/a/users"
+              isActive={isActive("/a/users")}
             />
+            <SidebarItem
+            icon={<Club />}
+            text="Organizations"
+            to="/a/organizations"
+            isActive={isActive("/a/organizations")}
+          />
             <SidebarItem
               icon={<BsFillTrophyFill />}
               text="Tournaments"
-              to="/dashboard/tournaments"
-              isActive={isActive("/dashboard/tournaments")}
+              to="/a/tournaments"
+              isActive={isActive("/a/tournaments")}
               hasSubmenu={true}
               isSubmenuOpen={isTournamentSubmenuOpen}
               toggleSubmenu={() => setIsTournamentSubmenuOpen(!isTournamentSubmenuOpen)}
@@ -139,9 +145,9 @@ export default function Admin() {
                   <ul className="ml-6 space-y-1 pt-1">
                     <li>
                       <Link
-                        to="/dashboard/tournaments"
+                        to="/a/tournaments"
                         className={`flex items-center rounded-lg px-4 py-2 text-sm transition-colors ${
-                          location.pathname === "/dashboard/tournaments"
+                          location.pathname === "/a/tournaments"
                             ? "bg-blue-700/40 text-white"
                             : "text-blue-100 hover:bg-blue-800/30"
                         }`}
@@ -151,9 +157,9 @@ export default function Admin() {
                     </li>
                     <li>
                       <Link
-                        to="/dashboard/tournaments/create"
+                        to="/a/tournaments/create"
                         className={`flex items-center rounded-lg px-4 py-2 text-sm transition-colors ${
-                          location.pathname === "/dashboard/tournaments/create"
+                          location.pathname === "/a/tournaments/create"
                             ? "bg-blue-700/40 text-white"
                             : "text-blue-100 hover:bg-blue-800/30"
                         }`}
@@ -169,8 +175,8 @@ export default function Admin() {
             <SidebarItem
               icon={<FiSettings />}
               text="Settings"
-              to="/dashboard/settings"
-              isActive={isActive("/dashboard/settings")}
+              to="/a/settings"
+              isActive={isActive("/a/settings")}
             />
           </ul>
         </nav>

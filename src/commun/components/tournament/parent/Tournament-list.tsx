@@ -16,7 +16,7 @@ import { TournamentCard } from "../TournamentCard";
 // Tournament Management Component
 export default function List() {
   const navigate = useNavigate();
-  const location = useLocation();
+  const path = useLocation().pathname;
     const { tournaments, softDeleteTournament,fetchTournaments } = useTournamentStore();
     const [searchTerm, setSearchTerm] = useState("")
     const [currentPage, setCurrentPage] = useState(1)
@@ -58,18 +58,17 @@ export default function List() {
 
   // Handle tournament actions
   const handleViewTournament = (tournament: Tournament) => {
-    const path = location.pathname;
   
     // Absolute navigation with leading slash
-    if (path === "dashboard/tournaments") {
-      navigate(`/dashboard/tournaments/${tournament.tournamentId}`, { replace: true });
+    if (path === "/a/tournaments") {
+      navigate(`/a/tournaments/${tournament.tournamentId}`, { replace: true });
     } else {
       navigate(`/c/tournaments/${tournament.tournamentId}`, { replace: true });
     }
   }
 
   const handleEditTournament = (tournament: Tournament) => {
-    navigate(`${location.pathname}/edit/${tournament.tournamentId}`)
+    navigate(`${path}/edit/${tournament.tournamentId}`)
   }
 
   const handleDeleteTournament = (tournament: Tournament) => {
