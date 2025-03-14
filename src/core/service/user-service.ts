@@ -21,6 +21,16 @@ export const UserService = {
     searchUser: async (searchTerm: string): Promise<ApiResponse<User>> => {
         return fetchApi<User>(`${prefix}/search/${searchTerm}`, { method: 'GET' });
     },
-    
+
+    getAllUsers: async (): Promise<ApiResponse<User[]>> => {
+        return fetchApi<User[]>(`${prefix}`, { method: 'GET' });
+    },
+
+    banUser: async (userId: string): Promise<ApiResponse<User>> => {
+        return fetchApi<User>(`${prefix}/soft-delete/${userId}`, { method: 'DELETE' });
+    },
+    unBanUser: async (userId: string): Promise<ApiResponse<User>> => {
+        return fetchApi<User>(`${prefix}/restore/${userId}`, { method: 'PATCH' });
+    },
 
 }

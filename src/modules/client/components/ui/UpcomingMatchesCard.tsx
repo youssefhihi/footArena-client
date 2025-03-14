@@ -1,4 +1,5 @@
 import { Match } from "../../../../types/Match"
+import { Avatar, AvatarFallback, AvatarImage } from "./avatar"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./card"
 
 interface UpcomingMatchesCardProps {
@@ -30,9 +31,10 @@ export function UpcomingMatchesCard({ matches }: UpcomingMatchesCardProps) {
               <div key={match.matchId} className="flex items-center justify-between rounded-lg border p-4">
                 <div className="flex flex-1 items-center space-x-4">
                   <div className="flex-shrink-0">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 font-semibold">
-                      {match.participant1.organization.name.charAt(0)}
-                    </div>
+                    <Avatar className="h-12 w-12">
+                      <AvatarImage imageUrl={match.participant1.organization.logo || " "} alt={match.participant1.organization.name} />
+                      <AvatarFallback className="bg-gray-200">{match.participant1.organization.name.charAt(0)}</AvatarFallback>
+                    </Avatar>
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="truncate font-medium">{match.participant1.organization.name}</p>
@@ -49,9 +51,10 @@ export function UpcomingMatchesCard({ matches }: UpcomingMatchesCardProps) {
                     <p className="truncate font-medium">{match.participant2.organization.name}</p>
                   </div>
                   <div className="flex-shrink-0">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 font-semibold">
-                      {match.participant2.organization.name.charAt(0)}
-                    </div>
+                    <Avatar className="h-12 w-12">
+                      <AvatarImage imageUrl={match.participant2.organization.logo || " "} alt={match.participant2.organization.name} />
+                      <AvatarFallback className="bg-gray-200">{match.participant2.organization.name.charAt(0)}</AvatarFallback>
+                    </Avatar>
                   </div>
                 </div>
               </div>

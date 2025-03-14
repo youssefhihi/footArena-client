@@ -1,22 +1,58 @@
 import { Trophy, Calendar, Users, BarChart3, ArrowRight } from "lucide-react"
 import { Link } from "react-router-dom"
 
-import { mockMatches, mockTournaments } from "./data"
-import { StatCard } from "../components/ui/StatCard"
 import { TournamentCard } from "../components/TournamentCard"
 import { UpcomingMatchesCard } from "../components/ui/UpcomingMatchesCard"
+import { StatCard } from "../../../commun/components/ui/stat-card"
+import { useTournamentStore } from "../../../core/store/tournament-store"
+import { TournamentStatus } from "../../../types/tournament"
+import { useOrganizationStore } from "../store/organization-store"
+import { useEffect, useState } from "react"
+import { useMatchStore } from "../../../core/store/match-store"
 
 export default function Dashboard() {
+  const [ loading , setLoading ] = useState(true);
+  const { availableTournaments, getAvailableTournaments } = useTournamentStore();
+  const { organizations , fetchOwnOrganization } = useOrganizationStore();
+  const { matches, getAllMatches } = useMatchStore();
+    
+
+ useEffect(() => {
+    const loadData = async () => {
+      await getAvailableTournaments();
+      await fetchOwnOrganization();
+      await getAllMatches();
+      setLoading(false);
+    }
+    loadData();
+
+  },[getAvailableTournaments, fetchOwnOrganization, getAllMatches])
+
   // Get recent tournaments (last 3)
-  const recentTournaments = mockTournaments
+  const recentTournaments = availableTournaments
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     .slice(0, 3)
 
   // Get upcoming matches
-  const upcomingMatches = mockMatches
+  const upcomingMatches = matches
     .filter((match) => new Date(match.matchTime) > new Date())
     .sort((a, b) => new Date(a.matchTime).getTime() - new Date(b.matchTime).getTime())
     .slice(0, 5)
+
+    const winPer = matches;
+    
+    if(loading) return (<div className="text-center items-center h-full flex justify-center">
+      <div>
+        <div
+          className="w-16 h-16 border-4   border-dashed rounded-full animate-spin border-blue-800 mx-auto"
+        ></div>
+        <h2 className="text-zinc-900 dark:text-white mt-4">Loading Data...</h2>
+        <p className="text-zinc-600 dark:text-zinc-400">
+          Your adventure is about to begin
+        </p>
+      </div>
+    </div>
+    );
 
   return (
     <div className="space-y-6">
@@ -36,31 +72,23 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           title="Total Tournaments"
-          value="24"
-          icon={<Trophy className="h-6 w-6 text-green-600" />}
-          change="+2"
-          changeText="from last month"
+          value={availableTournaments.length}
+          icon={<Trophy className="h-6 w-6 text-blue-800" />}
         />
         <StatCard
           title="Upcoming Matches"
-          value="8"
+          value={availableTournaments.filter((t) => t.status === TournamentStatus.NotStarted).length}
           icon={<Calendar className="h-6 w-6 text-blue-600" />}
-          change="+3"
-          changeText="from last week"
         />
         <StatCard
           title="Organizations"
-          value="3"
-          icon={<Users className="h-6 w-6 text-green-600" />}
-          change="0"
-          changeText="no change"
+          value={organizations.length}
+          icon={<Users className="h-6 w-6 text-blue-600" />}
         />
         <StatCard
           title="Win Rate"
-          value="68%"
+          value={0}
           icon={<BarChart3 className="h-6 w-6 text-blue-600" />}
-          change="+5%"
-          changeText="from last month"
         />
       </div>
 

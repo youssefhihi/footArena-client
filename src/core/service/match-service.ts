@@ -15,6 +15,10 @@ const MatchService = {
     updateMatch: async (matchId:string ,data: UpdateMatchRequest): Promise<ApiResponse<Match>> => {
         return fetchApi<Match>(`${prefix}/${matchId}`, { data, method: 'PATCH' });
     },
+
+    getAllMatches: async (): Promise<ApiResponse<Match[]>> => {
+        return fetchApi<Match[]>(`${prefix}`, { method: 'GET' });
+    },
 }
 
 export default MatchService

@@ -46,6 +46,10 @@ export const useTournamentStore = create<TournamentState>((set,get) => ({
   },
   fetchTournaments: async () => {
     set({ isLoading: true, error: null });
+    if(get().tournaments?.length > 0) {
+      set({ isLoading: false });
+      return;
+    }
       const response = await TournamentService.getUserTournaments();
       if (!response.success) {
         set({ error: response.errors, isLoading: false });
@@ -145,6 +149,10 @@ export const useTournamentStore = create<TournamentState>((set,get) => ({
 
   getAvailableTournaments: async () => {
     set({ isLoading: true, error: null });
+    if(get().availableTournaments.length > 0){
+      set({ isLoading: false });
+      return;
+    } 
     const response = await TournamentService.getAvailableTournaments();
     if (!response.success) {
       if (Array.isArray(response.errors)) {
