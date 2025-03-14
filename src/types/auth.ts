@@ -17,6 +17,8 @@ export interface FullName {
     role: Role
     isVerified: boolean
     profileImage?: string
+    createdAt: string
+    deletedAt: string
   }
   
   export interface LoginRequest {

@@ -18,8 +18,8 @@ export const SubmenuItem = ({ text, to , isopen}: { text: string; to: string, is
                   to={to}
                   className={`flex items-center rounded-lg px-4 py-2 text-sm transition-colors ${
                     location.pathname === to
-                      ? "bg-green-700 text-white"
-                      : "text-gray-200 hover:bg-green-700/50"
+                      ? "bg-blue-700 text-white"
+                      : "text-gray-200 hover:bg-blue-700/50"
                   }`}
                 >
                   {text}

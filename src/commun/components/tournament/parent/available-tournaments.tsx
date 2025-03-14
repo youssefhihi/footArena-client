@@ -57,8 +57,8 @@ export default function Available() {
       const path = location.pathname;
     
       // Absolute navigation with leading slash
-      if (path === "dashboard/tournaments") {
-        navigate(`/dashboard/tournaments/${tournament.tournamentId}`, { replace: true });
+      if (path.startsWith("/a")) {
+        navigate(`/a/tournaments/${tournament.tournamentId}`, { replace: true });
       } else {
         navigate(`/c/tournaments/${tournament.tournamentId}`, { replace: true });
       }

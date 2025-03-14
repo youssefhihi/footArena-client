@@ -19,6 +19,7 @@ import { Role } from "../../types/auth";
 import { useAuthStore } from "../../modules/auth/store/auth-store";
 import LoadingPage from "../components/ui/loading/loading-page";
 import { Club } from "lucide-react";
+import { SubmenuItem } from "../components/ui/sideBar/submenu";
 
 
 export default function Admin() {
@@ -131,47 +132,12 @@ export default function Admin() {
               isSubmenuOpen={isTournamentSubmenuOpen}
               toggleSubmenu={() => setIsTournamentSubmenuOpen(!isTournamentSubmenuOpen)}
             />
-            
             {/* Tournament Submenu */}
-            <AnimatePresence>
-              {isTournamentSubmenuOpen && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="overflow-hidden"
-                >
-                  <ul className="ml-6 space-y-1 pt-1">
-                    <li>
-                      <Link
-                        to="/a/tournaments"
-                        className={`flex items-center rounded-lg px-4 py-2 text-sm transition-colors ${
-                          location.pathname === "/a/tournaments"
-                            ? "bg-blue-700/40 text-white"
-                            : "text-blue-100 hover:bg-blue-800/30"
-                        }`}
-                      >
-                        All Tournaments
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        to="/a/tournaments/create"
-                        className={`flex items-center rounded-lg px-4 py-2 text-sm transition-colors ${
-                          location.pathname === "/a/tournaments/create"
-                            ? "bg-blue-700/40 text-white"
-                            : "text-blue-100 hover:bg-blue-800/30"
-                        }`}
-                      >
-                        Create Tournament
-                      </Link>
-                    </li>
-                  </ul>
-                </motion.div>
-              )}
-            </AnimatePresence>
-            
+             <ul className="ml-6 space-y-1 pt-1 scrollbar-hide">
+              <SubmenuItem text="Tournaments" to="/a/tournaments/available" isopen={isTournamentSubmenuOpen} />
+              <SubmenuItem text="My Tournaments" to="/a/tournaments" isopen={isTournamentSubmenuOpen} />
+              <SubmenuItem text="create" to="/a/tournaments/create" isopen={isTournamentSubmenuOpen} />
+            </ul>            
             <SidebarItem
               icon={<FiSettings />}
               text="Settings"

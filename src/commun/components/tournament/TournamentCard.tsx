@@ -3,8 +3,10 @@ import { motion } from "framer-motion"
 import { FiCalendar, FiUsers, FiEye, FiEdit2, FiTrash2 } from "react-icons/fi"
 import { GiSoccerBall } from "react-icons/gi"
 import { BsFillTrophyFill } from "react-icons/bs"
-import { Tournament, TournamentStatus } from "../../../types/tournament"
+import { Tournament } from "../../../types/tournament"
 import { Button } from "./Button"
+import { formatDate } from "../../utils/constant/date-formater"
+import { getStatusColor } from "../../utils/constant/status-color"
 
 interface TournamentCardProps {
   tournament: Tournament
@@ -14,29 +16,9 @@ interface TournamentCardProps {
 }
 
 export const TournamentCard: React.FC<TournamentCardProps> = ({ tournament, onView, onEdit, onDelete }) => {
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    }).format(date)
-  }
 
-  const getStatusColor = (status: TournamentStatus) => {
-    switch (status) {
-      case TournamentStatus.OnGoing:
-        return "bg-green-500/20 text-green-400 animate-pulse"
-      case TournamentStatus.NotStarted:
-        return "bg-blue-100/20 text-blue-400"
-      case TournamentStatus.Completed:
-        return "bg-gray-500/20 text-gray-400"
-      case TournamentStatus.Cancelled:
-        return "bg-red-500/20 text-red-400"
-      default:
-        return "bg-gray-500/20 text-gray-400"
-    }
-  }
+
+
 
   return (
     <motion.div
