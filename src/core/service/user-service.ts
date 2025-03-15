@@ -1,17 +1,21 @@
 import { ApiResponse } from "../../types/ApiResponse";
-import { User } from "../../types/auth";
-import { UpdateCurrentPasswordRequest } from "../../types/user";
+import { CreateUserRequest, LoginResponse, UpdateCurrentPasswordRequest, User } from "../../types/user";
 import fetchApi from "../api/fetch-api";
 
 const prefix = "users";
 
 export const UserService = {
+
+    createUser: async (data: CreateUserRequest): Promise<ApiResponse<User>> => {
+        return fetchApi<User>(`${prefix}`, { data, method: 'POST' });
+    },
+
     getAuthUser: async (): Promise<ApiResponse<User>> => {
         return fetchApi<User>(`${prefix}/me`, { method: 'GET' });
     },
 
-    updateProfile: async (data: User): Promise<ApiResponse<User>> => {
-        return fetchApi<User>(`${prefix}/update-profile`, { data, method: 'PUT' });
+    updateProfile: async (data: FormData): Promise<ApiResponse<LoginResponse>> => {
+        return fetchApi<LoginResponse>(`${prefix}/update-profile`, { data, method: 'PUT' });
     },
 
     updatePassword(data: UpdateCurrentPasswordRequest): Promise<ApiResponse<null>> {

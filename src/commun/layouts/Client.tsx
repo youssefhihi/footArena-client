@@ -12,8 +12,8 @@ import {
 import fifaLogo from  "../../assets/imgs/logo.png";
 import { SidebarItem } from "../components/ui/sideBar/sidebar-item";
 import { SubmenuItem } from "../components/ui/sideBar/submenu";
-import { Calendar, Home, Trophy, User, Users } from "lucide-react";
-import { Role } from "../../types/auth";
+import { Home, Trophy, User, Users } from "lucide-react";
+import { Role } from "../../types/user";
 import { useAuthStore } from "../../modules/auth/store/auth-store";
 import LoadingPage from "../components/ui/loading/loading-page";
 
@@ -60,9 +60,10 @@ export default function ClientLayout() {
   
   return (
     <>
-    {loading ? ( <LoadingPage />):
-      (authUser  && authUser.role === Role.PLAYER ? (
-
+      {loading ? ( <LoadingPage />):
+            (authUser ? (
+                authUser.role === Role.PLAYER ? (
+        
     <div className="flex h-screen bg-gray-900 text-white scrollbar-hide">
       {/* Sidebar Overlay */}
       {isMobile && isSidebarOpen && (
@@ -118,14 +119,8 @@ export default function ClientLayout() {
               <SubmenuItem text="Tournaments" to="/c/tournaments/available" isopen={isTournamentSubmenuOpen} />
               <SubmenuItem text="My Tournaments" to="/c/tournaments" isopen={isTournamentSubmenuOpen} />
               <SubmenuItem text="create" to="/c/tournaments/create" isopen={isTournamentSubmenuOpen} />
-              <SubmenuItem text="participated" to="/c/participated-tournaments" isopen={isTournamentSubmenuOpen} />
             </ul>
-            <SidebarItem
-              icon={<Calendar size={20} />}
-              text="Participated"
-              to="/c/participated-tournaments"
-              isActive={location.pathname === "/c/participated-tournaments"}
-            />
+            
             <SidebarItem
               icon={<Users size={20} />}
               text="Organizations"
@@ -206,19 +201,13 @@ export default function ClientLayout() {
                     className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-gray-800 py-1 shadow-lg ring-1 ring-black ring-opacity-5"
                   >
                     <Link
-                      to="/dashboard/profile"
+                      to="/c/profile"
                       className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700"
                       onClick={() => setIsUserMenuOpen(false)}
                     >
                       Your Profile
                     </Link>
-                    <Link
-                      to="/dashboard/settings"
-                      className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700"
-                      onClick={() => setIsUserMenuOpen(false)}
-                    >
-                      Settings
-                    </Link>
+                    
                     <button
                       onClick={handleLogout}
                       className="block w-full px-4 py-2 text-left text-sm text-gray-300 hover:bg-gray-700"
@@ -262,10 +251,12 @@ export default function ClientLayout() {
         pauseOnHover
       />
     </div>
-    ):(
-      <Navigate to="/auth/sign-in" replace />
-    )
-   )}
-    </>
-  );
+   ):(
+    <Navigate to="/forbidden" replace  />
+  )):(
+    <Navigate to="/unauthorized" replace  />
+  )
+)}
+  </>
+);
 }

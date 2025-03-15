@@ -6,7 +6,7 @@ import {
   RegisterRequest, 
   ResetPasswordRequest, 
   UpdatePasswordRequest 
-} from "../../../types/auth";
+} from "../../../types/user";
 
 const AuthService = {
   login: async (data: LoginRequest): Promise<ApiResponse<LoginResponse>> => {

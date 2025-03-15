@@ -10,12 +10,13 @@ import {
   FiUser,
 } from "react-icons/fi"
 import { CgUnblock } from "react-icons/cg";
-import { User } from "../../../types/auth"
+import { User } from "../../../types/user"
 import { useUserStore } from "../../../core/store/user-store"
 import { formatDate } from "../../../commun/utils/constant/date-formater"
 import { Avatar, AvatarFallback, AvatarImage } from "../../client/components/ui/avatar"
 import { BanIcon } from "lucide-react"
 import { DeleteModel } from "../../../commun/components/ui/model/delete"
+import { UserCreateForm } from "../components/user-form/user-form";
 
 // User Management Component
 export default function UserManagement() {
@@ -274,6 +275,9 @@ export default function UserManagement() {
             name={selectedUser.username} 
             cancelDelete={() => setIsDeleteModalOpen(false)}
              />
+      )}
+      { isCreateModalOpen && (
+        <UserCreateForm onClose={() => setIsCreateModalOpen(false)} />
       )}
     </div>
   );

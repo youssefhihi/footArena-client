@@ -7,7 +7,7 @@ import logo from "../../assets/imgs/logo.png"
 
 
 export function Auth() {
-  const location = useLocation()
+  const location = useLocation();
 
   return (
     <div

@@ -8,21 +8,23 @@ import { FiChevronLeft, FiChevronRight, FiFilter, FiPlus } from "react-icons/fi"
 import { Button } from "../Button";
 import { motion } from "framer-motion";
 import { GiTrophy } from "react-icons/gi";
+import { useAuthStore } from "../../../../modules/auth/store/auth-store";
 export default function Available() {
   const navigate = useNavigate();
   const { availableTournaments, getAvailableTournaments } = useTournamentStore();
   const [searchTerm, setSearchTerm] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
+  const { authUser } = useAuthStore();
 
       const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false)
       const [filters, setFilters] = useState({
           status: "all",
-          isTeams: "all",
+          deleted: "all",
       })
   
     useEffect(() => {
         getAvailableTournaments();
-    }, [getAvailableTournaments]);
+    }, [getAvailableTournaments, authUser]);
   
         
     const tournamentsPerPage = 5
@@ -39,7 +41,7 @@ export default function Available() {
         const matchesStatusFilter =
           filters.status === "all" || tournament.status.toLowerCase() === filters.status.toLowerCase();
         const matchesCategoryFilter =
-          filters.isTeams === "all" || tournament.isTeams.toString() === filters.isTeams;
+          filters.deleted === "all" || tournament.isTeams.toString() === filters.deleted;
   
         return matchesSearch && matchesStatusFilter && matchesCategoryFilter;
       })
@@ -96,10 +98,10 @@ export default function Available() {
                   onChange={(e) => setFilters({ ...filters, status: e.target.value })}
                 >
                   <option value="all">All Statuses</option>
-                  <option value="active">Active</option>
+                  <option value="Cancelled">Cancelled</option>
                   <option value="NotStarted">NotStarted</option>
-                  <option value="upcoming">Upcoming</option>
-                  <option value="completed">Completed</option>
+                  <option value="OnGoing">On Going</option>
+                  <option value="Completed">Completed</option>
                 </select>
               </div>
   
@@ -107,8 +109,8 @@ export default function Available() {
                 <label className="block text-sm font-medium text-gray-300">Category</label>
                 <select
                   className="mt-1 block w-full rounded-md border-gray-600 bg-gray-600 py-2 pl-3 pr-10 text-white focus:border-blue-500 focus:outline-none focus:ring-blue-500"
-                  value={filters.isTeams}
-                  onChange={(e) => setFilters({ ...filters, isTeams: e.target.value })}
+                  value={filters.deleted}
+                  onChange={(e) => setFilters({ ...filters, deleted: e.target.value })}
                 >
                   <option value="all">All Categories</option>
                   <option value="international">International</option>
@@ -121,7 +123,7 @@ export default function Available() {
               <div className="flex justify-end space-x-2">
                 <button
                   onClick={() => {
-                    setFilters({ status: "all", isTeams: "all" })
+                    setFilters({ status: "all", deleted: "all" })
                     setIsFilterMenuOpen(false)
                   }}
                   className="rounded-md bg-gray-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-500"

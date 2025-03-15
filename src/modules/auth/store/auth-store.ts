@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { RegisterRequest, ResetPasswordRequest, Role, UpdatePasswordRequest, User } from '../../../types/auth';
+import { RegisterRequest, ResetPasswordRequest, Role, UpdatePasswordRequest, User } from '../../../types/user';
 import UseAuthService from '../service/auth-service';
 import AuthService from '../service/auth-service';
 import { toast } from 'react-toastify';
@@ -113,7 +113,7 @@ export const useAuthStore = create<AuthState>((set,get) => ({
       },
       logout: () => {
         set({ authUser: undefined, token: null });
-        localStorage.removeItem('authToken');
+        localStorage.removeItem(import.meta.env.VITE_API_AUTH_TOKEN);
       },
 
       getAuthUser: async () => {

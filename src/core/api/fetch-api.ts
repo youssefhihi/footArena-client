@@ -22,21 +22,13 @@ export const fetchApi = async <T>(
   };
 
   // Set Content-Type if data is not FormData
-  // if (!(options?.data instanceof OrganizationRequest)) {
-  //   console.log('fetchApi: setting content type');
-  // }else {
-  // }
-  
-  if (options?.data && typeof options?.data === 'object') {
-    console.log("is a object");
-    if (Object.values(options?.data).some(value => value instanceof File)) {
-      console.log("is a file");
-      headers['Content-Type'] = 'multipart/form-data';
-    }else{
-      console.log("is not a file");
-      headers['Content-Type'] = 'application/json';
-    }
+  if (!(options?.data instanceof FormData)) {
+    headers['Content-Type'] = 'application/json';
+  }else {
+    headers['Content-Type'] = 'multipart/form-data';
+    
   }
+
   // Add authorization header if token exists
   if (authToken) {
     headers['Authorization'] = `Bearer ${authToken}`;

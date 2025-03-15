@@ -20,7 +20,7 @@ import { useAuthStore } from "../../../../modules/auth/store/auth-store"
 import { DeleteModel } from "../../ui/model/delete"
 import { Participant } from "../../../../types/participant"
 import { Avatar, AvatarFallback, AvatarImage } from "../../../../modules/client/components/ui/avatar"
-import { Role } from "../../../../types/auth"
+import { Role } from "../../../../types/user"
 
 
 

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { ArrowLeft, SearchIcon, UserPlus} from "lucide-react"
 import { Organization, TeamMember, TeamMemberRequest, UpdateRoleTeamMemberRequest } from "../../../../types/organozation"
-import { User } from "../../../../types/auth";
+import { User } from "../../../../types/user";
 import { useUserStore } from "../../../../core/store/user-store";
 import { useAuthStore } from "../../../../modules/auth/store/auth-store";
 import { OrganizationDetails } from "../organization-details";

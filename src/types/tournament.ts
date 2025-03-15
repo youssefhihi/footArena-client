@@ -1,4 +1,4 @@
-import { User } from "./auth";
+import { User } from "./user";
 import { Participant } from "./participant";
 
 export interface Tournament {
@@ -10,6 +10,7 @@ export interface Tournament {
     isTeams : boolean;
     status : TournamentStatus;
     createdAt : string;
+    deletedAt : string;
     startTime : string;
     participants : Participant[];
     user: User

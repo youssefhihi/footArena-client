@@ -5,7 +5,6 @@ import { ToastContainer } from "react-toastify";
 import {
   FiHome,
   FiUsers,
-  FiSettings,
   FiMenu,
   FiX,
   FiLogOut,
@@ -15,11 +14,12 @@ import {
 import fifaLogo from  "../../assets/imgs/logo.png";
 import { BsFillTrophyFill } from "react-icons/bs";
 import { SidebarItem } from "../components/ui/sideBar/sidebar-item";
-import { Role } from "../../types/auth";
+import { Role } from "../../types/user";
 import { useAuthStore } from "../../modules/auth/store/auth-store";
 import LoadingPage from "../components/ui/loading/loading-page";
 import { Club } from "lucide-react";
 import { SubmenuItem } from "../components/ui/sideBar/submenu";
+import { CgProfile } from "react-icons/cg";
 
 
 export default function Admin() {
@@ -68,7 +68,8 @@ export default function Admin() {
   return (
     <>
      {loading ? ( <LoadingPage />):
-           (authUser  && authUser.role === Role.ADMIN ? (
+           (authUser ? (
+            authUser.role === Role.ADMIN ? (
      
     <div className="flex h-screen bg-gray-900 text-white">
       {/* Sidebar Overlay */}
@@ -134,15 +135,16 @@ export default function Admin() {
             />
             {/* Tournament Submenu */}
              <ul className="ml-6 space-y-1 pt-1 scrollbar-hide">
-              <SubmenuItem text="Tournaments" to="/a/tournaments/available" isopen={isTournamentSubmenuOpen} />
+              <SubmenuItem text="All Tournaments" to="/a/tournaments/all" isopen={isTournamentSubmenuOpen} />
+              <SubmenuItem text="Available Tournaments" to="/a/tournaments/available" isopen={isTournamentSubmenuOpen} />
               <SubmenuItem text="My Tournaments" to="/a/tournaments" isopen={isTournamentSubmenuOpen} />
               <SubmenuItem text="create" to="/a/tournaments/create" isopen={isTournamentSubmenuOpen} />
             </ul>            
             <SidebarItem
-              icon={<FiSettings />}
-              text="Settings"
-              to="/a/settings"
-              isActive={isActive("/a/settings")}
+              icon={<CgProfile size={20} />}
+              text="Profile"
+              to="/a/profile"
+              isActive={isActive("/a/profile")}
             />
           </ul>
         </nav>
@@ -212,19 +214,13 @@ export default function Admin() {
                     className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-gray-800 py-1 shadow-lg ring-1 ring-black ring-opacity-5"
                   >
                     <Link
-                      to="/dashboard/profile"
+                      to="/a/profile"
                       className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700"
                       onClick={() => setIsUserMenuOpen(false)}
                     >
                       Your Profile
                     </Link>
-                    <Link
-                      to="/dashboard/settings"
-                      className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700"
-                      onClick={() => setIsUserMenuOpen(false)}
-                    >
-                      Settings
-                    </Link>
+                    
                     <button
                       onClick={handleLogout}
                       className="block w-full px-4 py-2 text-left text-sm text-gray-300 hover:bg-gray-700"
@@ -269,7 +265,9 @@ export default function Admin() {
       />
     </div>
     ):(
-      <Navigate to="auth/sign-in" replace  />
+      <Navigate to="/forbidden" replace  />
+    )):(
+      <Navigate to="/unauthorized" replace  />
     )
   )}
     </>

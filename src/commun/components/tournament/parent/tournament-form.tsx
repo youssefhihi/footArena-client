@@ -71,9 +71,29 @@ export default function Form(){
       }
     }
   };
+  const formVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  }
+
 
   return (
-    <div className="max-w-2xl mx-auto p-6 rounded-lg shadow-lg">
+    <div className="bg-gradient-to-br from-[#0f172a] to-[#1e293b]">
+    <motion.div
+      initial={{ scale: 0.95, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      className="overflow-hidden rounded-2xl bg-white/10 backdrop-blur-xl max-w-2xl mx-auto px-6 py-3 "
+    >      
+          <div className="relative">
+        {/* Top decorative element */}
+    <div className="absolute -top-6 -right-6 h-12 w-32 rotate-12 bg-gradient-to-r from-blue-500 to-indigo-600 blur-xl" />
+
+        <div className="relative p-8">
       <h2 className="text-2xl font-bold mb-6 text-white">
         {isEditMode ? "Edit Tournament" : "Create New Tournament"}
       </h2>
@@ -93,7 +113,13 @@ export default function Form(){
           </ul>
         </motion.div>
       )}
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <motion.form
+            onSubmit={handleSubmit(onSubmit)}
+            variants={formVariants}
+            initial="hidden"
+            animate="visible"
+            className="space-y-4"
+          >
         <FormInput label="Title" {...register("title")} error={errors.title?.message} />
 
         <div className="mb-4">
@@ -146,7 +172,10 @@ export default function Form(){
         <Button onClick={() => {}} disabled={isLoading} icon={FiSave}>
           {isLoading ? (isEditMode ? "Updating..." : "Creating...") : (isEditMode ? "Update Tournament" : "Create Tournament")}
         </Button>
-      </form>
+      </motion.form>
+      </div>
+      </div>
+    </motion.div>
     </div>
   );
 };

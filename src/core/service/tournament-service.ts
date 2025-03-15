@@ -1,6 +1,6 @@
 import fetchApi from "../api/fetch-api";
 import { ApiResponse } from "../../types/ApiResponse";
-import { Tournament, TournamentRequest } from "../../types/tournament";
+import { Tournament, TournamentRequest, TournamentStatus } from "../../types/tournament";
 
 
 const TournamentService = {
@@ -34,6 +34,14 @@ const TournamentService = {
   getTournamentById: async (id: string): Promise<ApiResponse<Tournament>> => {
     return fetchApi<Tournament>(`tournament/${id}`, { method: 'GET' });
   },
+
+  updateStatus: async(tournamentId: string, data:TournamentStatus): Promise<ApiResponse<Tournament>> =>{
+    return fetchApi<Tournament>(`tournament/update-status/${tournamentId}`, {data, method: 'PATCH'})
+  },
+
+  getAllTournaments: async() : Promise<ApiResponse<Tournament[]>> => {
+    return fetchApi<Tournament[]>(`tournament/all`, {method: 'GET'})
+  }
 };
 
 export default TournamentService;

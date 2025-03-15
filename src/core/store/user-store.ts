@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { User } from "../../types/auth";
+import { CreateUserRequest, UpdateCurrentPasswordRequest, User } from "../../types/user";
 import { UserService } from "../service/user-service";
 import { toast } from "react-toastify";
 
@@ -11,6 +11,9 @@ interface UserStore{
     getAllUsers: () => Promise<void>
     banUser: (userId: string) => Promise<void>
     unBanUser: (userId: string) => Promise<void>
+    createUser: (data: CreateUserRequest) => Promise<boolean>
+    updateProfile: (data: FormData) => Promise<void>
+    updatePassword: (data: UpdateCurrentPasswordRequest) => Promise<boolean>
 }
 
 export const useUserStore = create<UserStore>((set,get) => ({
@@ -52,7 +55,7 @@ export const useUserStore = create<UserStore>((set,get) => ({
    if (!response.success) {
       set({ error: response.errors, isLoading: false });
       if (Array.isArray(response.errors)) {
-        response.errors.forEach((err) => toast.error(err));
+        response.errors.forEach((err) => toast.error(err.message));
       } else {
         toast.error(response.errors?.message || 'Failed to Ban this user');
       }
@@ -89,5 +92,67 @@ export const useUserStore = create<UserStore>((set,get) => ({
     })  
     );  
     toast.success(response.message);
+  },
+
+  createUser: async (data) => {
+    set({ isLoading: true, error: null });
+    const response = await UserService.createUser(data);
+    if (!response.success) {
+      set({ error: response.errors, isLoading: false });
+      if (Array.isArray(response.errors)) {
+        response.errors.forEach((err) => toast.error(err));
+      } else {
+        toast.error(response.errors?.message || 'Failed to create user');
+      }
+      return false;
+    }
+    set((state) => ({
+       users: [...state.users, response.data ?? {} as User],
+       isLoading: false 
+    }));
+    toast.success(response.message);
+    return response.success;
+  },
+
+  updateProfile: async (data) => {
+    set({ isLoading: true, error: null });
+    const response = await UserService.updateProfile(data);
+    if (!response.success) {
+      set({ error: response.errors, isLoading: false });
+      if (Array.isArray(response.errors)) {
+        response.errors.forEach((err) => toast.error(err));
+      } else {
+        toast.error(response.errors?.message || 'Failed to update profile');
+      }
+      return;
+    }
+    if (response.data?.token) {
+      localStorage.setItem(
+        import.meta.env.VITE_API_AUTH_TOKEN,
+        response.data.token
+      );
+    } 
+    set({
+      isLoading: false
+    });
+    toast.success(response.message);
+  },
+  updatePassword: async (data) => {
+    set({ isLoading: true, error: null });
+    const response = await UserService.updatePassword(data);
+    if (!response.success) {
+      set({ error: response.errors, isLoading: false });
+      if (Array.isArray(response.errors)) {
+        response.errors.forEach((err) => toast.error(err));
+      } else {
+        toast.error(response.errors?.message || 'Failed to update Password');
+      }
+      return response.success;
+    }
+    set({
+      isLoading: false
+    });
+    toast.success(response.message);
+    return response.success
   }
 }));

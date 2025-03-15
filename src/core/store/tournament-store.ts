@@ -2,12 +2,13 @@ import { Participant, ParticipantRequest } from './../../types/participant';
 import { create } from 'zustand';
 import TournamentService from '../service/tournament-service';
 import { toast } from 'react-toastify';
-import { Tournament, TournamentRequest } from '../../types/tournament';
+import { Tournament, TournamentRequest, TournamentStatus } from '../../types/tournament';
 import { ParticipantService } from '../service/participant-service';
 
 interface TournamentState {
   tournaments: Tournament[];
   availableTournaments: Tournament[];
+  allTournaments: Tournament[];
   isLoading: boolean;
   error: Record<string, string> | null;
   fetchTournaments: () => Promise<void>;
@@ -20,11 +21,14 @@ interface TournamentState {
   getAvailableTournaments: () => Promise<void>;
   participateToTournament: (data: ParticipantRequest) => Promise<Participant | undefined>;
   deleteParticipantFromTournament: (particpantId: string) => Promise<void>;
+  updateTournamentStatus: (tournamentId: string, newStatus: TournamentStatus) => Promise<void>
+  getAllTournaments: () => Promise<void>
 }
 
 export const useTournamentStore = create<TournamentState>((set,get) => ({
   tournaments: [],
   availableTournaments: [],
+  allTournaments: [],
   isLoading: false,
   error: null,
   getTournamentById: async (id) => {
@@ -204,9 +208,54 @@ export const useTournamentStore = create<TournamentState>((set,get) => ({
           ...tournament,
           participants: tournament.participants.filter((p) => p.participantId !== particpantId),
         })),
+        allTournaments: state.allTournaments.map((tournament) => ({
+          ...tournament,
+          participants: tournament.participants.filter((p) => p.participantId !== particpantId),
+        })),
         isLoading: false,
       }));
      
       toast.success(response.message);
-  }
+  },
+
+  updateTournamentStatus: async(tournamentId, newStatus) =>{
+      set({ isLoading: true, error: null});
+     const response = await TournamentService.updateStatus(tournamentId, newStatus);
+     if (!response.success) {
+      set({ error: response.errors, isLoading: false });
+      if (Array.isArray(response.errors)) {
+        response.errors.forEach((err) => toast.error(err));
+      } else {
+        toast.error(response.errors?.message || 'Failed to Join this tournament');
+      }
+      return;
+    }
+    set((state) => ({
+      tournaments: state.tournaments.map((t) =>
+        t.tournamentId === tournamentId ? response.data ?? t : t
+      ),
+      allTournaments: state.allTournaments.map((t) =>
+        t.tournamentId === tournamentId ? response.data ?? t : t
+      ),
+      availableTournaments: state.availableTournaments.map((t) =>
+        t.tournamentId === tournamentId ? response.data ?? t : t
+      ),
+      isLoading: false,
+    }));
+    toast.success(response.message);
+  },
+  getAllTournaments: async () => {
+    set({ isLoading: true, error: null });
+    if(get().allTournaments?.length > 0) {
+      set({ isLoading: false });
+      return;
+    }
+      const response = await TournamentService.getAllTournaments();
+      if (!response.success) {
+        set({ error: response.errors, isLoading: false });
+        toast.error(response.message);
+        return;
+      }
+      set({ allTournaments: response.data, isLoading: false });
+  },
 }));
