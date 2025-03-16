@@ -113,6 +113,7 @@ export const fetchApi = async <T>(
     if (verbose) {
       console.error('fetchApi error:', errorMessage);
     }
+
     return {
       success: false,
       errors: errorMessage,

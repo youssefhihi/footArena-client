@@ -25,13 +25,13 @@ export default function ClientLayout() {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isTournamentSubmenuOpen, setIsTournamentSubmenuOpen] = useState(false);
   const [ loading , setLoading] = useState<boolean>(true);
-  const { authUser, getAuthUser} = useAuthStore();
+  const { authUser, getAuthUser, logout} = useAuthStore();
   const location = useLocation();
   const navigate = useNavigate();
 
   // Handle logout
   const handleLogout = () => {
-    // Implement your logout logic here
+    logout();
     navigate("/auth/sign-in");
   };
 
@@ -83,7 +83,7 @@ export default function ClientLayout() {
         {/* Sidebar Header */}
         <div className="flex h-16 items-center justify-between px-4">
           <Link to="/dashboard" className="flex items-center space-x-2">
-            <img src={fifaLogo} alt="FIFA" className="h-8 w-8" />
+            <img src={fifaLogo} alt="FootArena" className="h-10 w-10 rounded-full" />
             <span className="text-lg font-bold">FIFA Admin</span>
           </Link>
           {isMobile && (
@@ -254,7 +254,7 @@ export default function ClientLayout() {
    ):(
     <Navigate to="/forbidden" replace  />
   )):(
-    <Navigate to="/unauthorized" replace  />
+    <Navigate to="/auth/sign-in" replace  />
   )
 )}
   </>

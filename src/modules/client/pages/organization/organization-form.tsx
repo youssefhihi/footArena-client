@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useRef } from "react"
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { Upload, Users } from "lucide-react"
@@ -8,9 +8,8 @@ import { Label } from "../../components/ui/label"
 import { Textarea } from "../../components/ui/textarea"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {  useForm, useWatch } from "react-hook-form"
-import { OrganizationRequest } from "../../../../types/organozation"
 import { useOrganizationStore } from "../../store/organization-store"
-import { createOrganizationSchema } from "../../validation/organization-validation"
+import { CreateOrganizationRequest, createOrganizationSchema } from "../../validation/organization-validation"
 import { FiAlertCircle } from "react-icons/fi"
 import {motion} from 'framer-motion'
 import { FormButton } from "../../../../commun/components/ui/button/Button"
@@ -23,13 +22,16 @@ export default function OrganizationForm() {
     const { organizationId } = useParams();
     const isEditMode = Boolean(organizationId);
   
-    const { register, handleSubmit, control, setValue, formState: { errors, isSubmitting } } = useForm<OrganizationRequest>({
+    const { register, handleSubmit, control, setValue, formState: { errors, isSubmitting } } = useForm<CreateOrganizationRequest>({
       resolver: zodResolver(createOrganizationSchema),
     });
   
     const { isLoading, error, createOrganization, updateOrganization, getOrganizationById } = useOrganizationStore();
   
     const [logoPreview, setLogoPreview] = useState<string | null>(null);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null)
+    const fileInputRef = useRef<HTMLInputElement>(null)
+
   
     useEffect(() => {
       if (isEditMode && organizationId) {
@@ -46,23 +48,32 @@ export default function OrganizationForm() {
       }
     }, [isEditMode, organizationId, setValue, getOrganizationById]);
   
-    const onSubmit = async (data: OrganizationRequest) => {
+    const onSubmit = async (data: CreateOrganizationRequest) => {
+      const formData = new FormData();
+      formData.append("name", data.name);
+      formData.append("description", data.description);
+      formData.append("isTeam", data.isTeam.toString());
+      if (selectedFile) {
+        formData.append("logo", selectedFile);
+      }
       if (isEditMode && organizationId) {
-        const res = await updateOrganization(organizationId, data);
+        const res = await updateOrganization(organizationId, formData);
         if (res) navigate("/c/organizations");
       } else {
-        const res = await createOrganization(data);
+        const res = await createOrganization(formData);
         if (res) navigate("/c/organizations");
       }
     };
 
- 
+
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
+      setSelectedFile(file)
       const reader = new FileReader()
-      reader.onload = () => {   
-          setLogoPreview(reader.result as string)
+      reader.onloadend = () => {
+        const base64String = reader.result as string
+        setLogoPreview(base64String)
       }
       reader.readAsDataURL(file)
     }
@@ -75,7 +86,7 @@ export default function OrganizationForm() {
   });
   return (
     <div className="mx-auto max-w-3xl">
-      <h1 className="mb-6 text-2xl font-bold text-gray-800">{isEditMode ? "Edit Organization" : "Create Organization"}</h1>
+      <h1 className="mb-6 text-2xl font-bold text-gray-200">{isEditMode ? "Edit Organization" : "Create Organization"}</h1>
       <form onSubmit={handleSubmit(onSubmit)}  encType="multipart/form-data">
         <Card>
           <CardHeader>
@@ -120,13 +131,9 @@ export default function OrganizationForm() {
                   id="logo-upload"
                   type="file"
                   accept="image/*"
+                  ref={fileInputRef}
                   className="hidden"
-                  {...register("logo", {
-                    onChange: (e) => {
-                      // Call your custom handler
-                      handleLogoChange(e);
-                    },
-                  })}
+                  onChange={handleLogoChange}
                 />
               <span className="text-sm text-gray-500">Click to upload organization logo (recommended: 200x200px)</span>
               {errors.logo?.message && (

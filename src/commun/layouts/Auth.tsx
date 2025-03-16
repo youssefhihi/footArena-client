@@ -68,7 +68,7 @@ export function Auth() {
           transition={{ duration: 0.3 }}
           className="mb-8 flex items-center justify-center"
         >
-          <img src={logo} alt="FIFA Logo" className="h-16" />
+          <img src={logo} alt="FIFA Logo" className="h-16 rounded-full" />
           <div className="ml-4 border-l-2 border-white/20 pl-4">
             <h1 className="text-2xl font-bold text-white">Competition Manager</h1>
             <p className="text-sm text-blue-200">Manage your FIFA tournaments with ease</p>

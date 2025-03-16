@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Organization, OrganizationRequest, TeamMember, TeamMemberRequest, UpdateRoleTeamMemberRequest } from "../../../types/organozation";
+import { Organization, TeamMember, TeamMemberRequest, UpdateRoleTeamMemberRequest } from "../../../types/organozation";
 import { toast } from "react-toastify";
 import { OrganizationService } from "../service/organization-service";
 import { TeamMemberService } from "../service/team-member-service";
@@ -10,9 +10,9 @@ interface OrganizationState {
     isLoading: boolean;
     error: Record<string, string> | null;
     fetchOwnOrganization: () => Promise<void>;
-    createOrganization: (data: OrganizationRequest) => Promise<boolean>;
+    createOrganization: (data: FormData) => Promise<boolean>;
     getOrganizationById: (id: string) => Promise<Organization | undefined | null>;
-    updateOrganization: (id: string, data: OrganizationRequest) => Promise<boolean>;
+    updateOrganization: (id: string, data: FormData) => Promise<boolean>;
     deleteOrganization: (id: string) => void;
     addTeamMemberToOrganization: (teamMember: TeamMemberRequest) => Promise<TeamMember | undefined>
     removeTeamMemberFromOrganization: (id: string) => Promise<boolean>

@@ -4,6 +4,7 @@ import UnauthorizedPage from "../modules/errors/401";
 import ForbiddenPage from "../modules/errors/403";
 import ServerErrorPage from "../modules/errors/500";
 import NotFoundPage from "../modules/errors/404";
+import LandingPage from "../modules/welcome/landing-page";
 const AllTournaments = lazy(() => import("../modules/admin/pages/tournament/all-tournament"));
 const ProfilePage = lazy(() => import("../modules/profile/pages/profile"));
 const UserManagement = lazy(() => import("../modules/admin/pages/users"));
@@ -36,6 +37,7 @@ const AvailableTournamentA = lazy(() => import("../modules/admin/pages/tournamen
 const AppRouter = () => {
     return (
         <BrowserRouter>
+
         <Routes>
           <Route path="/auth" element={<Auth />}>
             <Route path="sign-in" element={<Login />} />
@@ -81,7 +83,7 @@ const AppRouter = () => {
           <Route path="/unauthorized" element={<UnauthorizedPage />} />
           <Route path="/forbidden" element={<ForbiddenPage />} />
           <Route path="/server-error" element={<ServerErrorPage />} />
-
+          <Route path="" element={<LandingPage />} />
             {/* 404 - Not Found - This should be the last route */}
             <Route path="*" element={<NotFoundPage />} />
         </Routes>

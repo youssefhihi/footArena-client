@@ -30,7 +30,7 @@ export default function Admin() {
   const [ loading , setLoading] = useState<boolean>(true);
   const location = useLocation();
   const navigate = useNavigate();
-  const { authUser, getAuthUser } = useAuthStore();
+  const { authUser, getAuthUser ,logout} = useAuthStore();
 
 
   // Check if current route is active
@@ -40,7 +40,7 @@ export default function Admin() {
 
   // Handle logout
   const handleLogout = () => {
-    // Implement your logout logic here
+    logout();
     navigate("/auth/sign-in");
   };
 
@@ -90,7 +90,7 @@ export default function Admin() {
         {/* Sidebar Header */}
         <div className="flex h-16 items-center justify-between px-4">
           <Link to="/dashboard" className="flex items-center space-x-2">
-            <img src={fifaLogo} alt="FIFA" className="h-8 w-8" />
+            <img src={fifaLogo} alt="FIFA" className="h-10 w-10 rounded-full" />
             <span className="text-lg font-bold">FIFA Admin</span>
           </Link>
           {isMobile && (
@@ -267,7 +267,7 @@ export default function Admin() {
     ):(
       <Navigate to="/forbidden" replace  />
     )):(
-      <Navigate to="/unauthorized" replace  />
+      <Navigate to="/auth/sign-in" replace  />
     )
   )}
     </>

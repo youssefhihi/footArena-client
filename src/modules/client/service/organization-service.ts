@@ -1,6 +1,6 @@
 import fetchApi from "../../../core/api/fetch-api";
 import { ApiResponse } from "../../../types/ApiResponse";
-import {  Organization, OrganizationRequest } from "../../../types/organozation";
+import {  Organization } from "../../../types/organozation";
 
 const prefix = "organization";
 
@@ -12,7 +12,7 @@ export const OrganizationService = {
         return fetchApi<Organization[]>(`${prefix}/me`, { method: "GET" });
     },
 
-    createOrganization: async (data: OrganizationRequest): Promise<ApiResponse<Organization>> => {
+    createOrganization: async (data: FormData): Promise<ApiResponse<Organization>> => {
         return fetchApi<Organization>(`${prefix}`, { data, method: "POST" });
     },
 
@@ -20,7 +20,7 @@ export const OrganizationService = {
         return fetchApi<Organization>(`${prefix}/${id}`, { method: "GET" });
     },
 
-    updateOrganization: async (id: string, data: OrganizationRequest): Promise<ApiResponse<Organization>> => {
+    updateOrganization: async (id: string, data: FormData): Promise<ApiResponse<Organization>> => {
         return fetchApi<Organization>(`${prefix}/${id}`, { data, method: "PUT" });
     },
 
