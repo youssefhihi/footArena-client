@@ -12,12 +12,10 @@ const url = import.meta.env.VITE_API_URL
 
 export const UpdateProfile = () => {
   const { authUser } = useAuthStore();
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitError, setSubmitError] = useState<string | null>(null)
-  const [profileImagePreview, setProfileImagePreview] = useState<string | null>(authUser?.profileImage ? url + authUser.profileImage : null)
+   const [profileImagePreview, setProfileImagePreview] = useState<string | null>(authUser?.profileImage ? url + authUser.profileImage : null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
-  const { updateProfile } = useUserStore();
+  const { isLoading, updateProfile,error } = useUserStore();
 
   const {
     register,
@@ -53,9 +51,6 @@ export const UpdateProfile = () => {
   }
 console.log(errors);
   const onSubmit = async (data: UpdateProfileFormData) => {
-    setIsSubmitting(true)
-    setSubmitError(null)
-
       const formData = new FormData()
 
       // Add text fields
@@ -121,7 +116,23 @@ console.log(errors);
               Update your personal information
             </motion.p>
           </div>
-
+        {error && Array.isArray(error) && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-6 rounded-lg bg-red-500/20 p-4 text-sm text-red-200"
+            >
+              <div className="flex items-center gap-2">
+                <FiAlertCircle className="h-5 w-5" />
+                <span>Updateing Profile failed</span>
+              </div>
+              <ul className="mt-2 list-inside list-disc pl-2">
+                {error.map((errorItem, index) => (
+                  <li key={index}>{Object.values(errorItem)}</li>
+                ))}
+              </ul>
+            </motion.div>
+          )}
           {/* Profile Image */}
           <div className="mb-6 flex justify-center">
             <motion.div
@@ -160,18 +171,7 @@ console.log(errors);
             </motion.div>
           </div>
 
-          {submitError && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mb-6 rounded-lg bg-red-500/20 p-4 text-sm text-red-200"
-            >
-              <div className="flex items-center gap-2">
-                <FiAlertCircle className="h-5 w-5" />
-                <span>{submitError}</span>
-              </div>
-            </motion.div>
-          )}
+        
 
           <motion.form
             onSubmit={handleSubmit(onSubmit)}
@@ -269,10 +269,10 @@ console.log(errors);
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               type="submit"
-              disabled={isSubmitting}
+              disabled={isLoading}
               className="relative mt-2 flex w-full items-center justify-center overflow-hidden rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 p-3 text-white shadow-lg transition-all hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-70"
             >
-              {isSubmitting ? (
+              {isLoading ? (
                 <motion.div
                   animate={{ rotate: 360 }}
                   transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}

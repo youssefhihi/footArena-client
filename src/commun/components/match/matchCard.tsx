@@ -34,7 +34,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, isOwner }) => {
       resolver: zodResolver(updateMatchSchema),
     });
     const onSubmit = async(data: UpdateMatchRequest) => {
-      console.log("Form submitted:", data);
+      console.log("Form submitted:", match, data);
      const res = await updateMatch(match.matchId,data);
      if(res){
       setEditedMatch(res)

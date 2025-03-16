@@ -68,6 +68,12 @@ export const useMatchStore = create<MatchState>((set, get) => ({
       toast.error(response.message);
       return;
     }
+    set((state) => ({
+      matches: state.matches.map((t) =>
+        t.matchId === matchId ? response.data ?? t : t
+      ),
+      isLoading: false,
+    }));
     toast.success(response.message);
     return response.data;
   }

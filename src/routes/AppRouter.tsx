@@ -17,7 +17,7 @@ const UpdatePassword = lazy(() => import("../modules/auth/pages/update-password"
 const ForgetPassword = lazy(() => import("../modules/auth/pages/forget-password"));
 const TournamentsManagement = lazy(() => import("../modules/client/pages/tournament/tournament"));
 const Organizations = lazy(() => import("../modules/client/pages/organization/organization"));
-const Statistics = lazy(() => import("../modules/client/pages/statistic"));
+const Statistics = lazy(() => import("../modules/client/pages/statistics/statistic"));
 const Dashboard = lazy(() => import("../modules/client/pages/dashboard"));
 const DashboardHome = lazy(() => import("../modules/admin/pages/dashboard"));
 const TournamentManagement = lazy(() => import("../modules/admin/layouts/tournament"));

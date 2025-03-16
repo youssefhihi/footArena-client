@@ -6,8 +6,6 @@ import {
   FiMenu,
   FiX,
   FiLogOut,
-  FiUser,
-  FiBell,
 } from "react-icons/fi";
 import fifaLogo from  "../../assets/imgs/logo.png";
 import { SidebarItem } from "../components/ui/sideBar/sidebar-item";
@@ -16,6 +14,7 @@ import { Home, Trophy, User, Users } from "lucide-react";
 import { Role } from "../../types/user";
 import { useAuthStore } from "../../modules/auth/store/auth-store";
 import LoadingPage from "../components/ui/loading/loading-page";
+import { Avatar, AvatarFallback, AvatarImage } from "../../modules/client/components/ui/avatar";
 
 
 
@@ -54,7 +53,7 @@ export default function ClientLayout() {
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [getAuthUser]);
 
 
   
@@ -160,35 +159,28 @@ export default function ClientLayout() {
               <FiMenu size={24} />
             </button>
             <h1 className="text-xl font-semibold">
-              {location.pathname === "/dashboard"
-                ? "Dashboard Overview"
-                : location.pathname.includes("/users")
-                ? "User Management"
-                : location.pathname.includes("/tournaments")
-                ? "Tournament Management"
-                : "Settings"}
+              Player Dashboard
             </h1>
           </div>
 
           <div className="flex items-center space-x-4">
-            {/* Notifications */}
-            <button className="relative rounded-full p-1 text-gray-400 hover:bg-gray-800 hover:text-white">
-              <FiBell size={20} />
-              <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs">
-                3
-              </span>
-            </button>
+
 
             {/* User Menu */}
             <div className="relative">
+            <div className="flex space-x-4">  
+              <p className="pt-2 cursor-pointer ">{authUser.fullName.firstName + " " + authUser.fullName.lastName}</p>
               <button
-                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                className="flex items-center rounded-full text-sm focus:outline-none"
+              onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                className=" cursor-pointer  flex items-center rounded-full text-sm focus:outline-none"
               >
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white">
-                  <FiUser />
-                </div>
+                  <Avatar className=" flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-white">
+                    <AvatarImage imageUrl={authUser.profileImage || ""} alt={authUser.username} />
+                    <AvatarFallback className="bg-blue-600 text-white">{authUser.fullName.firstName.charAt(0)}</AvatarFallback>
+                  </Avatar>
               </button>
+              </div>
+              
 
               {/* User Dropdown */}
               <AnimatePresence>
@@ -198,7 +190,7 @@ export default function ClientLayout() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 10 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-gray-800 py-1 shadow-lg ring-1 ring-black ring-opacity-5"
+                    className="absolute z-50 right-0 mt-3 w-48 origin-top-right rounded-md bg-gray-800 py-1 shadow-lg ring-1 ring-black ring-opacity-5"
                   >
                     <Link
                       to="/c/profile"
