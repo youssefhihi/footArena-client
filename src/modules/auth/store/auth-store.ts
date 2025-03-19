@@ -16,6 +16,7 @@ interface AuthState {
   updatePassword: (data: UpdatePasswordRequest) => Promise<boolean>;
   logout: () => void;
   getAuthUser: () => Promise<User | undefined>;
+  tokenPresent: () => boolean;
 }
 
 
@@ -131,6 +132,10 @@ export const useAuthStore = create<AuthState>((set,get) => ({
         return response.data;
       },
 
-   
+      tokenPresent: () => {
+        const token = localStorage.getItem(import.meta.env.VITE_API_AUTH_TOKEN);
+        return !!token;
+      },
+  
 
 }));

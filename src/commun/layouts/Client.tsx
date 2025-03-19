@@ -15,6 +15,7 @@ import { Role } from "../../types/user";
 import { useAuthStore } from "../../modules/auth/store/auth-store";
 import LoadingPage from "../components/ui/loading/loading-page";
 import { Avatar, AvatarFallback, AvatarImage } from "../../modules/client/components/ui/avatar";
+import { RiDashboard3Line } from "react-icons/ri";
 
 
 
@@ -24,7 +25,7 @@ export default function ClientLayout() {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isTournamentSubmenuOpen, setIsTournamentSubmenuOpen] = useState(false);
   const [ loading , setLoading] = useState<boolean>(true);
-  const { authUser, getAuthUser, logout} = useAuthStore();
+  const { authUser, getAuthUser, logout, tokenPresent} = useAuthStore();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -103,6 +104,12 @@ export default function ClientLayout() {
               text="Dashboard"
               to="/c/dashboard"
               isActive={location.pathname === "/c/dashboard"}
+            />
+            <SidebarItem
+              icon={<RiDashboard3Line size={20} />}
+              text="Statistics"
+              to="/c/statistics"
+              isActive={location.pathname === "/c/statistics"}
             />
             <SidebarItem
               icon={<Trophy size={20} />}
@@ -246,7 +253,11 @@ export default function ClientLayout() {
    ):(
     <Navigate to="/forbidden" replace  />
   )):(
-    <Navigate to="/auth/sign-in" replace  />
+    (tokenPresent() ?(
+      <Navigate to="/unauthorized" replace  />
+    ):(
+      <Navigate to="/auth/sign-in" replace  />
+    ))
   )
 )}
   </>

@@ -60,19 +60,19 @@ export default function Info() {
   useEffect(() => {
     setIsOwner(authUser?.id === tournament?.user.id);
   }, [authUser, tournament?.user.id]);
-  const fetchTournament = async () => {
-      const tournament = await getTournamentById(tournamentId!);
-      
-      setTournament(tournament);
-  };
-
-
-    useEffect(() => {
+  
+  
+  useEffect(() => {
+      const fetchTournament = async () => {
+          const tournament = await getTournamentById(tournamentId!);
+          
+          setTournament(tournament);
+      };
       fetchTournament();
       if(activeTab === "matches") fetchTournamentMatches(tournamentId!);
       if(activeTab === "matches") fetchTournamentMatches(tournamentId!);
       if(activeTab === "table") fetchTournamentRounds(tournamentId!);
-    }, [tournamentId, getTournamentById, fetchTournamentMatches, activeTab]);
+    }, [tournamentId,fetchTournamentRounds, fetchTournamentMatches, activeTab,getTournamentById]);
 
   const handleViewOrganization = (organization: Organization) => {
     if(path.startsWith("/a/")){

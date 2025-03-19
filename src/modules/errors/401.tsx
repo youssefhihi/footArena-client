@@ -2,7 +2,10 @@ import { motion } from "framer-motion"
 import { FiLock } from "react-icons/fi"
 import { ErrorLayout } from "../../commun/layouts/error"
 
+
 export default function UnauthorizedPage() {
+
+   
   const UnauthorizedIllustration = () => (
     <motion.div
       className="relative h-32 w-32"

@@ -1,5 +1,6 @@
 import { FiUsers } from "react-icons/fi"
 import { Organization } from "../../../../types/organozation"
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 
 interface OrganizationCardProps {
   organization: Organization
@@ -10,11 +11,10 @@ export const OrganizationCard: React.FC<OrganizationCardProps> = ({ organization
     <div className="bg-gray-700/50 rounded-lg p-4 mb-4">
       <div className="flex items-center mb-3">
         <div className="w-10 h-10 rounded-full overflow-hidden mr-3">
-          <img
-            src={organization.logo || "/placeholder.svg?height=40&width=40"}
-            alt={organization.name}
-            className="w-full h-full object-cover"
-          />
+            <Avatar className="h-10 w-10 overflow-hidden rounded-full bg-gray-200">
+                <AvatarImage imageUrl={organization?.logo  || ""} alt={organization?.name} />
+                <AvatarFallback className="border border-white bg-gray-200 text-gray-800">{organization?.name.charAt(0)}</AvatarFallback>
+            </Avatar>
         </div>
         <div>
           <h4 className="text-white font-medium">{organization.name}</h4>

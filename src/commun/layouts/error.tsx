@@ -1,11 +1,9 @@
-"use client"
-
-import type React from "react"
 
 import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
-import { FiHome, FiArrowLeft } from "react-icons/fi"
+import { FiArrowLeft, FiLogOut } from "react-icons/fi"
 import fifaLogo from "../../assets/imgs/logo.png"
+import { useAuthStore } from "../../modules/auth/store/auth-store"
 
 interface ErrorLayoutProps {
   statusCode: string
@@ -22,6 +20,8 @@ export const ErrorLayout: React.FC<ErrorLayoutProps> = ({
   illustration,
   showLoginButton = false,
 }) => {
+
+    const { logout} = useAuthStore();
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#0f172a] to-[#1e293b]">
       {/* Background elements */}
@@ -117,11 +117,12 @@ export const ErrorLayout: React.FC<ErrorLayoutProps> = ({
                     className="flex flex-col space-y-3 sm:flex-row sm:space-x-3 sm:space-y-0"
                   >
                     <Link
+                    onClick={logout}
                       to="/"
                       className="flex items-center justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-800"
                     >
-                      <FiHome className="mr-2 h-4 w-4" />
-                      Go to Home
+                      <FiLogOut className="mr-2 h-4 w-4" />
+                      Logout
                     </Link>
                     <button
                       onClick={() => window.history.back()}

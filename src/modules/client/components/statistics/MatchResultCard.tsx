@@ -3,6 +3,7 @@ import { format, parseISO } from "date-fns"
 import { GiWhistle } from "react-icons/gi"
 import { Match } from "../../../../types/Match"
 import { Participant } from "../../../../types/participant"
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 
 interface MatchResultCardProps {
   match: Match
@@ -18,9 +19,7 @@ export const MatchResultCard: React.FC<MatchResultCardProps> = ({ match }) => {
     return participant?.organization?.name || "Unknown Team"
   }
 
-  const getTeamLogo = (participant: Participant) => {
-    return participant?.organization?.logo || "/placeholder.svg?height=40&width=40"
-  }
+
 
   const getScoreClass = (score1: number, score2: number) => {
     if (score1 > score2) return "text-green-400"
@@ -40,11 +39,10 @@ export const MatchResultCard: React.FC<MatchResultCardProps> = ({ match }) => {
 
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3 w-2/5">
-          <img
-            src={getTeamLogo(match.participant1) || "/placeholder.svg"}
-            alt={getTeamName(match.participant1)}
-            className="w-8 h-8 rounded-full object-cover"
-          />
+            <Avatar className="h-10 w-10 overflow-hidden rounded-full bg-gray-200">
+                <AvatarImage imageUrl={match.participant1.organization?.logo  || ""} alt={match.participant1.organization?.name} />
+                <AvatarFallback className="border border-white bg-gray-200 text-gray-800">{match.participant1.organization?.name.charAt(0)}</AvatarFallback>
+            </Avatar>
           <span className="text-white font-medium truncate">{getTeamName(match.participant1)}</span>
         </div>
 
@@ -64,17 +62,16 @@ export const MatchResultCard: React.FC<MatchResultCardProps> = ({ match }) => {
           </span>
             </>
         ):(
-            <span className="text-gray-400">:</span>
+            <span className="text-gray-400">VS</span>
         )}
         </div>
 
         <div className="flex items-center justify-end space-x-3 w-2/5">
           <span className="text-white font-medium truncate text-right">{getTeamName(match.participant2)}</span>
-          <img
-            src={getTeamLogo(match.participant2) || "/placeholder.svg"}
-            alt={getTeamName(match.participant2)}
-            className="w-8 h-8 rounded-full object-cover"
-          />
+           <Avatar className="h-10 w-10 overflow-hidden rounded-full bg-gray-200">
+                <AvatarImage imageUrl={match.participant2.organization?.logo  || ""} alt={match.participant2.organization?.name} />
+                <AvatarFallback className="border border-white bg-gray-200 text-gray-800">{match.participant2.organization?.name.charAt(0)}</AvatarFallback>
+            </Avatar>
         </div>
       </div>
 
