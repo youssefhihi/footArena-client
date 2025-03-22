@@ -177,7 +177,7 @@ export default function OrganizationInfo() {
         <div>
           <div className="mb-4 flex justify-between">
             <h2 className="text-lg font-semibold">Team Members</h2>
-            { isOwner &&
+            { isOwner && organization.isTeam &&
               <button
                 className="rounded-md bg-[#0FFF50] px-4 py-2 font-medium text-black hover:bg-opacity-90"
                 onClick={() => setShowAddMember(true)}

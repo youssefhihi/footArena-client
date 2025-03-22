@@ -21,7 +21,6 @@ export default function OrganizationForm() {
     const navigate = useNavigate();
     const { organizationId } = useParams();
     const isEditMode = Boolean(organizationId);
-  
     const { register, handleSubmit, control, setValue, formState: { errors, isSubmitting } } = useForm<CreateOrganizationRequest>({
       resolver: zodResolver(createOrganizationSchema),
     });
@@ -148,7 +147,8 @@ export default function OrganizationForm() {
             </div>
 
             {/* Organization Type */}
-            <div className="space-y-2">
+           {!isEditMode && !organizationId && 
+           <div className="space-y-2">
               <Label>Organization Type</Label>
               <div className="flex items-center space-x-2">
           <input
@@ -172,6 +172,7 @@ export default function OrganizationForm() {
           </motion.p>
         )}
       </div>
+      }
 
             {/* Organization Name */}
             <div className="space-y-2">

@@ -26,7 +26,11 @@ export const useMatchStore = create<MatchState>((set, get) => ({
     const response = await MatchService.getAllMatches();
     if (!response.success) {
       set({ error: response.errors, isLoading: false });
-      toast.error(response.message);
+      if (Array.isArray(response.errors)) {
+        response.errors.forEach((err) => toast.error(err.message));
+      } else {
+        toast.error(response.errors?.message || 'Failed to update tournament');
+      }
       return;
     }
     set({ matches: response.data, isLoading: false });
@@ -41,7 +45,11 @@ export const useMatchStore = create<MatchState>((set, get) => ({
     const response = await MatchService.getTournamentMatches(tournamentId);
     if (!response.success) {
       set({ error: response.errors, isLoading: false });
-      toast.error(response.message);
+      if (Array.isArray(response.errors)) {
+        response.errors.forEach((err) => toast.error(err.message));
+      } else {
+        toast.error(response.errors?.message || 'Failed to update tournament');
+      }
       return;
     }
     set({       
@@ -53,7 +61,11 @@ export const useMatchStore = create<MatchState>((set, get) => ({
     const response = await MatchService.generateTournamentMatches(tournamentId, data);
     if (!response.success) {
       set({ error: response.errors, isLoading: false });
-      toast.error(response.message);
+      if (Array.isArray(response.errors)) {
+        response.errors.forEach((err) => toast.error(err.message));
+      } else {
+        toast.error(response.errors?.message || 'Failed to update tournament');
+      }
       return;
     }
     toast.success(response.message);
@@ -65,7 +77,11 @@ export const useMatchStore = create<MatchState>((set, get) => ({
     const response = await MatchService.updateMatch(matchId,data);
     if (!response.success) {
       set({ error: response.errors, isLoading: false });
-      toast.error(response.message);
+      if (Array.isArray(response.errors)) {
+        response.errors.forEach((err) => toast.error(err.message));
+      } else {
+        toast.error(response.errors?.message || 'Failed to update tournament');
+      }
       return;
     }
     set((state) => ({

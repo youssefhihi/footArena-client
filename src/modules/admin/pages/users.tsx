@@ -6,11 +6,10 @@ import {
   FiChevronLeft,
   FiChevronRight,
   FiFilter,
-  FiDownload,
   FiUser,
 } from "react-icons/fi"
 import { CgUnblock } from "react-icons/cg";
-import { User } from "../../../types/user"
+import { Role, User } from "../../../types/user"
 import { useUserStore } from "../../../core/store/user-store"
 import { formatDate } from "../../../commun/utils/constant/date-formater"
 import { Avatar, AvatarFallback, AvatarImage } from "../../client/components/ui/avatar"
@@ -39,13 +38,14 @@ export default function UserManagement() {
 
 
   const filteredUsers = users.filter(user => {
+    const isPlayer = user.role !== Role.ADMIN ;
     const matchesSearch = user.username.toLowerCase().includes(searchTerm.toLowerCase()) || 
                          user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          user.phoneNumber?.toLowerCase().includes(searchTerm.toLowerCase());  
     const isBanned = user.deletedAt ? "Banned" : "NotBanned";
     const matchesStatusFilter =
       filters.status === "all" || isBanned.toLowerCase() === filters.status.toLowerCase();
-    return matchesSearch && matchesStatusFilter;
+    return matchesSearch && matchesStatusFilter && isPlayer;
   });
   
   // Pagination
@@ -152,10 +152,7 @@ export default function UserManagement() {
             )}
           </div>
           
-          <button className="flex items-center rounded-lg bg-gray-700 px-4 py-2.5 text-sm font-medium text-white hover:bg-gray-600">
-            <FiDownload className="mr-2" />
-            Export
-          </button>
+         
         </div>
       </div>
 
