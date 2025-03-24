@@ -26,7 +26,12 @@ export const MatchForm: React.FC<MatchFormProps> = ({ tournamentId,onCancel }) =
   });
 
   const onSubmit = async(data: MatchRequest) => {
-       await generateTournamentMatches(tournamentId,data);
+     const generated =  await generateTournamentMatches(tournamentId,data);
+     if(generated){
+      window.location.reload();
+     }else{
+      onCancel();
+     } 
   };
 
   return (

@@ -78,6 +78,7 @@ export const useTournamentStore = create<TournamentState>((set,get) => ({
       
       set((state) => ({
         tournaments: [...state.tournaments, response.data ?? {} as Tournament],
+        availableTournaments: [...state.availableTournaments, response.data ?? {} as Tournament],
         isLoading: false,
       }));
       toast.success(response.message);
@@ -116,6 +117,8 @@ export const useTournamentStore = create<TournamentState>((set,get) => ({
       }
       set((state) => ({
         tournaments: state.tournaments.filter((t) => t.tournamentId !== id),
+        availableTournaments: state.availableTournaments.filter((t) => t.tournamentId !== id),
+        allTournaments: state.allTournaments.filter((t) => t.tournamentId !== id),
         isLoading: false,
       }));
       toast.success(response.message);
@@ -130,6 +133,8 @@ export const useTournamentStore = create<TournamentState>((set,get) => ({
       }
       set((state) => ({
         tournaments: [...state.tournaments, response.data ?? {} as Tournament],
+        availableTournaments: [...state.availableTournaments, response.data ?? {} as Tournament],
+        allTournaments: [...state.allTournaments, response.data ?? {} as Tournament],
         isLoading: false,
       }));
       toast.success(response.message);
@@ -146,6 +151,7 @@ export const useTournamentStore = create<TournamentState>((set,get) => ({
       }
       set((state) => ({
         tournaments: state.tournaments.filter((t) => t.tournamentId !== id),
+        allTournaments: state.allTournaments.filter((t) => t.tournamentId !== id),
         isLoading: false,
       }));
       toast.success(response.message);

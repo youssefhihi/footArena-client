@@ -9,7 +9,7 @@ interface MatchState {
     error: Record<string, string> | null;
     getAllMatches: () => Promise<void>;
     fetchTournamentMatches: (tournamentId: string) => Promise<void>;
-    generateTournamentMatches: (tournamentId: string, data: MatchRequest) => Promise<void>;
+    generateTournamentMatches: (tournamentId: string, data: MatchRequest) => Promise<boolean>;
     updateMatch: (matchId: string ,data: UpdateMatchRequest) => Promise<Match | undefined>
 }
 
@@ -66,10 +66,11 @@ export const useMatchStore = create<MatchState>((set, get) => ({
       } else {
         toast.error(response.errors?.message || 'Failed to update tournament');
       }
-      return;
+      return false;
     }
     toast.success(response.message);
     set({ matches: response.data, isLoading: false });
+    return response.success;
   },
 
   updateMatch: async (matchId, data) => {

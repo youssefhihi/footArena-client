@@ -21,6 +21,7 @@ import { BsPersonFill, BsPeopleFill } from "react-icons/bs"
 import { useTournamentStore } from "../../../../core/store/tournament-store"
 import { Tournament, TournamentStatus } from "../../../../types/tournament"
 import { getStatusColor } from "../../../../commun/utils/constant/status-color"
+import { useNavigate } from "react-router-dom"
 
 const url = import.meta.env.VITE_API_URL
 export default function AllTournaments() {
@@ -51,7 +52,7 @@ export default function AllTournaments() {
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false)
   const [newStatus, setNewStatus] = useState<TournamentStatus>(TournamentStatus.NotStarted)
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
-
+  const navigate = useNavigate();
   // Fetch tournaments on component mount
   useEffect(() => {
     getAllTournaments()
@@ -172,8 +173,7 @@ export default function AllTournaments() {
 
   // Handle view details
   const handleViewDetails = (tournament: Tournament) => {
-    setSelectedTournament(tournament)
-    setIsDetailsModalOpen(true)
+    navigate(`/a/tournaments/${tournament.tournamentId}`)
   }
   return (
     <div className="space-y-6">
